@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.0" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="fx-team" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端浏览器存储初探">
+<meta property="og:url" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/index.html">
+<meta property="og:site_name" content="fx-team">
+<meta property="og:description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg">
+<meta property="og:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/youku_cookie.jpg">
+<meta property="og:updated_time" content="2018-01-15T03:42:46.366Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端浏览器存储初探">
+<meta name="twitter:description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta name="twitter:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/"/>
+
+
+
+
+
+  <title>前端浏览器存储初探 | fx-team</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">fx-team</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+
+            
+              首页
+            
+
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+
+            
+              归档
+            
+
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fx-team">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端浏览器存储初探</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-13T16:43:17+08:00">2018-01-13</time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：</p>
+<ul>
+<li>cookie</li>
+<li>localStorage</li>
+<li>sessionStorage</li>
+<li>indexedDB</li>
+<li>PWA</li>
+<li>service worker</li>
+</ul>
+<p><strong><font color="brown">数据存储终究是基于具体的业务场景的，那么我们应该如何有针对性的进行选择呢?</font></strong></p>
+<p>要想在不同的技术方案中选择出适合自己的场景的应用方案，首先需要对不同的技术概念以及它所适用的场景有足够的掌握，我们接下来就对上述提到的技术点依次做介绍与分析。</p>
+<h3 id="1-cookie"><a href="#1-cookie" class="headerlink" title="1. cookie"></a>1. cookie</h3><p>cookie 产生的原因是什么呢？<br>答：HTTP 请求是<strong>无状态的。</strong>所以服务端无法记住当前的 HTTP 请求与之前的请求有什么联系，这样所造成的后果就是服务端无法对用户信息以及登录状态进行维护。而 cookie 的产生使得服务端可以区分当前是哪个客户端发起的请求。</p>
+<p>cookie 的生成方式：</p>
+<ul>
+<li>http response header 中的 set-cookie 由服务端发出，客服端存储。</li>
+<li>js 中可以通过 document.cookie 可以读写 cookie</li>
+</ul>
+<p>cookie 存储的限制：</p>
+<ul>
+<li>作为浏览器存储，大小为 4KB 左右</li>
+<li>需要设置过期时间 expire</li>
+</ul>
+<p>cookie 还存在两个属性，分别是 expire 与 httponly。</p>
+<p><strong>在性能优化方面，cookie 能做些什么呢？</strong><br>cookie 是存储在主域名下面的，这样会造成一定程度的CDN流量损耗。那我们应当怎样去解决呢？其实，解决方式也很简单，我们只需<strong>将CND域名与主站域名独立开</strong>就可以了。<br>下面两张图分别是百度和优酷对于 cookie 的应用，很明显，优酷是一个 bad case。<br><img src="/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg" title="百度 cookie 示例"><br><img src="/2018/01/13/前端浏览器存储初探/youku_cookie.jpg" title="优酷 cookie 示例"></p>
+<h3 id="2-localStorage"><a href="#2-localStorage" class="headerlink" title="2. localStorage"></a>2. localStorage</h3><ul>
+<li>HTML5设计出来专门用于浏览器存储的</li>
+<li>大小为 5M 左右</li>
+<li>仅在客户端使用，不和服务端进行通信</li>
+<li>有较好的接口封装</li>
+</ul>
+<h3 id="3-sessionStorage"><a href="#3-sessionStorage" class="headerlink" title="3. sessionStorage"></a>3. sessionStorage</h3><ul>
+<li>会话级别的浏览器存储（浏览器的一个 tab 就是一个会话）</li>
+<li>对于表单信息的维护</li>
+</ul>
+<h3 id="4-indexedDB（使用较少）"><a href="#4-indexedDB（使用较少）" class="headerlink" title="4. indexedDB（使用较少）"></a>4. indexedDB（使用较少）</h3><ul>
+<li>用于客户端存储大量的结构化的数据，该 API 使用索引实现对数据的高性能搜索。</li>
+<li>为应用创建离线版本。</li>
+</ul>
+<h3 id="5-PWA（谷歌提出，已经达到了与安卓同样重要的程度）"><a href="#5-PWA（谷歌提出，已经达到了与安卓同样重要的程度）" class="headerlink" title="5. PWA（谷歌提出，已经达到了与安卓同样重要的程度）"></a>5. PWA（谷歌提出，已经达到了与安卓同样重要的程度）</h3><p>PWA是一种 Web App 新模型，并不是指具体的某一种技术或单一的知识点，是通过一系列的web新特性配合优秀的UI交互设计，逐步的增强 Web App 的用户体验。<br>它所提出的标准主要针对以下几方面：</p>
+<ul>
+<li>可靠性 无网络情况下提供基本页面的访问</li>
+<li>快速 针对页面渲染以及数据访问（转场动画）</li>
+<li>融入 增加到手机桌面 全屏、推送等特性</li>
+</ul>
+<h3 id="6-service-workers"><a href="#6-service-workers" class="headerlink" title="6. service workers"></a>6. service workers</h3><p>JS ———— 单线程（在用户层面无法创建多线程）=&gt; 大量数据的获取或者前端相关的运算（3D模型数据） =&gt; JS阻塞 =&gt; 有可能影响UI层面的渲染</p>
+<p>一个 service worker 是一段运行在浏览器后台进程里的脚本，它独立于当前页面，提供了一些不需要与web页面交互的功能，即那种在网页背后悄悄执行的能力。在将来，基于它可以实现消息推送，静默更新等服务，但是目前它首先要具备的功能是拦截和处理网络请求，包括可编程的响应缓存管理。<br>应用场景：</p>
+<ul>
+<li>应用于离线化（拦截请求）</li>
+<li>与主页面进行通信</li>
+</ul>
+<p>下面的两个链接可以用于我们在浏览器中查看正在运行中的service worker：<br>chrome://inspect/#service-workers<br>chrome://serviceworker-internals/</p>
+<p>接下来我们具体看两个 service worker应用的例子：</p>
+<ul>
+<li><strong>应用于离线化的例子</strong></li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--serviceWorker.html--&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">"./main.css"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>service worker<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">    service worker</span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./serviceWorker.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// service worker 注册</span></span><br><span class="line"><span class="keyword">if</span> (navigator.serviceWorker) &#123;</span><br><span class="line">  navigator.serviceWorker.register(<span class="string">'./serviceWorkerConfig.js'</span>, &#123;<span class="attr">scope</span>: <span class="string">'./'</span>&#125;)</span><br><span class="line">      .then(<span class="function">(<span class="params">reg</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(reg);</span><br><span class="line">      &#125;)</span><br><span class="line">      .catch(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(e);</span><br><span class="line">      &#125;)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  alert(<span class="string">"service worker is not supported!"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将文件添加至缓存</span></span><br><span class="line">self.addEventListener(<span class="string">'install'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  e.waitUntil(</span><br><span class="line">    caches.open(<span class="string">'service-worker-v1'</span>).then(<span class="function">(<span class="params">cache</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'open cache'</span>);</span><br><span class="line">      <span class="keyword">return</span> cache.addAll([<span class="string">'./serviceWorker.js'</span>, <span class="string">'./main.css'</span>, <span class="string">'./serviceWorker.html'</span>])</span><br><span class="line">    &#125;)</span><br><span class="line">  )</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 读取缓存</span></span><br><span class="line">self.addEventListener(<span class="string">'fetch'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e);</span><br><span class="line">  <span class="comment">// 改变返回的数据</span></span><br><span class="line">  e.respondWith(</span><br><span class="line">    caches.match(e.request).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (res) &#123;</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 通过fetch向网络发起请求</span></span><br><span class="line">        fetch(url).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (res) &#123;</span><br><span class="line">            <span class="comment">// 将返回的文件存至缓存</span></span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 用户提示</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  )</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>通过以上代码的展示，我们便用service worker实现了将静态文件存至缓存，从而完成应用的离线化。</p>
+<ul>
+<li><strong>与主页面进行通信</strong></li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--message.html--&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">"msg-box"</span>&gt;</span><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"msg-input"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"send-msg"</span>&gt;</span>发送<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"msg-app.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// msg-app.js</span></span><br><span class="line"><span class="keyword">if</span> (navigator.serviceWorker) &#123;</span><br><span class="line">  <span class="keyword">let</span> sendBtn = <span class="built_in">document</span>.getElementById(<span class="string">'send-msg'</span>);</span><br><span class="line">  <span class="keyword">let</span> msgInput = <span class="built_in">document</span>.getElementById(<span class="string">'msg-input'</span>);</span><br><span class="line">  <span class="keyword">let</span> msgBox = <span class="built_in">document</span>.getElementById(<span class="string">'msg-box'</span>);</span><br><span class="line"></span><br><span class="line">  sendBtn.addEventListener(<span class="string">'click'</span>, () =&gt; &#123;</span><br><span class="line">    <span class="comment">// 将input框中的信息发送给service worker</span></span><br><span class="line">    navigator.serviceWorker.controller.postMessage(msgInput.value);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  navigator.serviceWorker.addEventListener(<span class="string">'message'</span>, (event) =&gt; &#123;</span><br><span class="line">    msgBox.innerHTML += (<span class="string">`&lt;li&gt;<span class="subst">$&#123;event.data.message&#125;</span>&lt;/li&gt;`</span>)</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// service worker 注册</span></span><br><span class="line">  navigator.serviceWorker.register(<span class="string">'./msg-serviceWorker.js'</span>, &#123;<span class="attr">scope</span>: <span class="string">'./'</span>&#125;)</span><br><span class="line">      .then(<span class="function">(<span class="params">reg</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(reg);</span><br><span class="line">      &#125;)</span><br><span class="line">      .catch(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(e);</span><br><span class="line">      &#125;)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  alert(<span class="string">"service worker is not supported!"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// msg-serviceWorker.js</span></span><br><span class="line">self.addEventListener(<span class="string">'message'</span>, (event) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> promise = self.clients.matchAll().then(<span class="function">(<span class="params">clientList</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> sendId = event.source ? event.source.id : <span class="string">'unknown'</span>;</span><br><span class="line">    clientList.forEach(<span class="function">(<span class="params">list</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (list.id === sendId) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        list.postMessage(&#123;</span><br><span class="line">          client: sendId,</span><br><span class="line">          message: event.data</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">  event.waitUntil(promise);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们可以清楚的看到，上面的代码通过监听 message 事件，service worker 可以达到与页面进行通信的目的，更多关于 service worker 的细节内容大家可以查阅更多的资料进行学习，<a href="https://www.w3ctech.com/topic/866" target="_blank" rel="noopener">Service Worker 入门</a>     </p>
+<p>以上就是浏览器存储初探的全部内容，希望大家可以多多实践，文中有错误的地方，欢迎指正。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/12/前端技术周刊 - 2018.01.12/" rel="next" title="前端技术周刊 - 2018/01/12">
+                <i class="fa fa-chevron-left"></i> 前端技术周刊 - 2018/01/12
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">一个富有想象力的前端团队fx-team</p>
+              <p class="site-description motion-element" itemprop="description">一个富有想象力的前端团队</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-cookie"><span class="nav-number">1.</span> <span class="nav-text">1. cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-localStorage"><span class="nav-number">2.</span> <span class="nav-text">2. localStorage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-sessionStorage"><span class="nav-number">3.</span> <span class="nav-text">3. sessionStorage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-indexedDB（使用较少）"><span class="nav-number">4.</span> <span class="nav-text">4. indexedDB（使用较少）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-PWA（谷歌提出，已经达到了与安卓同样重要的程度）"><span class="nav-number">5.</span> <span class="nav-text">5. PWA（谷歌提出，已经达到了与安卓同样重要的程度）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-service-workers"><span class="nav-number">6.</span> <span class="nav-text">6. service workers</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一个富有想象力的前端团队fx-team</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

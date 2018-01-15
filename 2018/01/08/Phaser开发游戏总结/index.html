@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.0" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="fx-team" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端浏览器存储初探">
+<meta property="og:url" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/index.html">
+<meta property="og:site_name" content="fx-team">
+<meta property="og:description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg">
+<meta property="og:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/youku_cookie.jpg">
+<meta property="og:updated_time" content="2018-01-15T03:42:46.366Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端浏览器存储初探">
+<meta name="twitter:description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta name="twitter:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/"/>
+
+
+
+
+
+  <title>Phaser开发游戏总结 | fx-team</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">fx-team</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+
+            
+              首页
+            
+
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+
+            
+              归档
+            
+
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/08/Phaser开发游戏总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fx-team">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Phaser开发游戏总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-08T18:13:33+08:00">2018-01-08</time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Phaser是一个非常好用的html5游戏开发框架，官网上是这样介绍的：“一个快速、免费并且完全开源的框架，提供Canvas和WebGL两种渲染方式，致力于增强桌面端与移动端浏览器游戏的体验”。</p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><h3 id="开始游戏的场景"><a href="#开始游戏的场景" class="headerlink" title="开始游戏的场景"></a>开始游戏的场景</h3><p>html5标准新加了一个 canvas标签，在canvas上我们可以通过js绘制各种各样的内容，游戏内包含着场景，精灵等要素。我们绘制了宽度600高度250，的一个canvas画布。游戏渲染模式使用Phaser.AUTO，也就是自动检测，在浏览器支持WebGL的时候使用WebGL渲染，不支持的时候回退到Canvas渲染。。并且加载了Splash场景，通过start，进入了Splash场景。等Splash场景结束后，我们可以通过<code>game.state.start(&#39;Main&#39;);</code>来加载Main场景实现场景之前的切换。在场景中有各种各样的方法来控制场景的展示，init方法，preload方法，create方法和update方法，分别管理当前场景的初始化、预加载、生成游戏对象以及更新游戏循环。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">600</span>, <span class="number">250</span> , Phaser.AUTO,<span class="string">""</span>);</span><br><span class="line"><span class="keyword">const</span> main = <span class="keyword">new</span> Phaser.State();</span><br><span class="line">game.state.add(<span class="string">'Splash'</span>, Splash);</span><br><span class="line">game.state.add(<span class="string">'Main'</span>, Main);</span><br><span class="line">game.state.start(<span class="string">'Splash'</span>);</span><br></pre></td></tr></table></figure>
+<p>通过这些方法，就可以完成一个非常炫酷的Phaser游戏了</p>
+<h3 id="丰富我们的游戏"><a href="#丰富我们的游戏" class="headerlink" title="丰富我们的游戏"></a>丰富我们的游戏</h3><p>初始化Init方法：启动物理引擎（ARCADE），这是Phaser框架自带的最简单的物理引擎，用于矩形盒的碰撞检测。。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main.init = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    game.physics.startSystem(Phaser.Physics.ARCADE);</span><br><span class="line">    game.world.enableBody = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>预加载方法：加载各类游戏资源，并设置唯一id，被精灵引用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">game.load.image(<span class="string">'floor'</span>, <span class="string">'img/floor.png'</span>);</span><br></pre></td></tr></table></figure>
+<p>生成游戏对象方法：生成游戏地图</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">main.create = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.floors = game.add.group();</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">//floor</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">1</span>; i &lt; n; i++)&#123;</span><br><span class="line">        <span class="keyword">var</span> floor = game.add.sprite(<span class="number">30</span>*i, <span class="number">90</span>, <span class="string">'box'</span>,<span class="string">''</span>, <span class="keyword">this</span>.floors);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更新循环方法：通过方向键控制主角左右移动和跳跃，当主角撞到地板，做销毁处理，并且重新开始游戏。这样我们就完成一个简单的跳跃障碍物游戏。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">main.update = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    game.physics.arcade.overlap(<span class="keyword">this</span>.player, <span class="keyword">this</span>.floor, <span class="keyword">this</span>.kill, <span class="literal">null</span>, <span class="keyword">this</span>);</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.cursor.left.isDown) </span><br><span class="line">        <span class="keyword">this</span>.player.body.velocity.x = <span class="number">-200</span>;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.cursor.up.isDown &amp;&amp; <span class="keyword">this</span>.player.body.touching.down) </span><br><span class="line">        <span class="keyword">this</span>.player.body.velocity.y = <span class="number">-250</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Phaser开发游戏问题总结"><a href="#Phaser开发游戏问题总结" class="headerlink" title="Phaser开发游戏问题总结"></a>Phaser开发游戏问题总结</h2><h3 id="iPhone下游戏显示模糊"><a href="#iPhone下游戏显示模糊" class="headerlink" title="iPhone下游戏显示模糊"></a>iPhone下游戏显示模糊</h3><p>这是因为iPhone现在都是retina屏幕，在retina屏幕下，会用2个像素点的宽度去渲染图片的1个像素点，因此该图片在retina屏幕上实际会占据200x200像素的空间，相当于图片被放大了一倍，因此图片会变得模糊。所以我们在初始化canvas大小不应该是屏幕的 大小去渲染，使用屏幕大小俩倍做渲染，同时通过css来讲canvas缩小，就可以解决问题。也可以通过dpi来做渲染相应大小。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> dpi = <span class="built_in">window</span>.devicePixelRatio || <span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> width = <span class="built_in">document</span>.documentElement.clientWidth * dpi;</span><br><span class="line"><span class="keyword">const</span> height = <span class="built_in">document</span>.documentElement.clientHeight * dpi;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Game</span> <span class="keyword">extends</span> <span class="title">Phaser</span>.<span class="title">Game</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">        <span class="keyword">super</span>(width, height, Phaser.CANVAS, <span class="string">'content'</span>, <span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="资源问题"><a href="#资源问题" class="headerlink" title="资源问题"></a>资源问题</h3><p>Phaser社区版本提供了 grunt打包工具，可以自行缩减比如常用 wap端游戏不需要的按键控制，多余的物理引擎，来缩小资源大小。<br>整个资源打包也可以通过webpack内置的压缩进行优化。<br>游戏的图片其实对于整个资源占比很大，对一些按钮，icon，标志图片等较小图片可以进行合图操作，减少大量的http请求，对一些超过1024*1024大小的图片进行些许压缩。</p>
+<h3 id="内存优化"><a href="#内存优化" class="headerlink" title="内存优化"></a>内存优化</h3><ul>
+<li>减少不必要的计算<ul>
+<li>图片阴影，发光效果，添加mask效果，可以直接用图片替代</li>
+<li>复杂文字效果使用图片</li>
+</ul>
+</li>
+<li>游戏内不直接使用setTimeout setInterVal</li>
+<li>精灵数量的控制和注意及时的销毁，保证内存不泄露</li>
+<li>在主循环update逻辑做到<code>精简</code>，避免大片业务逻辑放到上面</li>
+<li>动画不放到update里 比如位置移动，可以使用补间动画(tween)</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">update() &#123;</span><br><span class="line">    sprite.x += <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Phaser-学习资源"><a href="#Phaser-学习资源" class="headerlink" title="Phaser 学习资源"></a>Phaser 学习资源</h2><p><a href="https://github.com/orange-games" target="_blank" rel="noopener">Phaser插件合集</a><br><a href="http://www.phaser.io" target="_blank" rel="noopener">Phaser官网</a><br><a href="http://phaserengine.com" target="_blank" rel="noopener">Phaser中文官网</a><br><a href="https://github.com/channingbreeze/games" target="_blank" rel="noopener">Phaser小游戏合集</a><br><a href="https://github.com/lean/phaser-es6-webpack" target="_blank" rel="noopener">Phaser webpack配置</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/游戏/" rel="tag"># 游戏</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/05/前端技术周刊 - 2018.01.05/" rel="next" title="前端技术周刊 - 2018/01/05">
+                <i class="fa fa-chevron-left"></i> 前端技术周刊 - 2018/01/05
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/12/前端技术周刊 - 2018.01.12/" rel="prev" title="前端技术周刊 - 2018/01/12">
+                前端技术周刊 - 2018/01/12 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">一个富有想象力的前端团队fx-team</p>
+              <p class="site-description motion-element" itemprop="description">一个富有想象力的前端团队</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始"><span class="nav-number">2.</span> <span class="nav-text">开始</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开始游戏的场景"><span class="nav-number">2.1.</span> <span class="nav-text">开始游戏的场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#丰富我们的游戏"><span class="nav-number">2.2.</span> <span class="nav-text">丰富我们的游戏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Phaser开发游戏问题总结"><span class="nav-number">3.</span> <span class="nav-text">Phaser开发游戏问题总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#iPhone下游戏显示模糊"><span class="nav-number">3.1.</span> <span class="nav-text">iPhone下游戏显示模糊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#资源问题"><span class="nav-number">3.2.</span> <span class="nav-text">资源问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存优化"><span class="nav-number">3.3.</span> <span class="nav-text">内存优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Phaser-学习资源"><span class="nav-number">4.</span> <span class="nav-text">Phaser 学习资源</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一个富有想象力的前端团队fx-team</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
