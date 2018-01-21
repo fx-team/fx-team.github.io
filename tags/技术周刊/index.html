@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next muse use-motion" lang="zh">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -64,7 +64,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="websocket, stomp," />
 
 
 
@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta name="description" content="由于近期需要使用websocket的部分功能，然而在工作过程中，发现自己对这部分知识点不是很了解，而且对于后台同学提出的websocket和stomp的组合，不知如何下手。经过相关资料查证，分享与大家，如有纰漏，希望不吝指出。本文行文为三个部分，分别讲述：socket是什么，websocket是什么，stomp是什么，如何结合后两者投入使用。   1. socket目前来说，我们经常说的socke">
+<meta name="keywords" content="websocket, stomp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前端浏览器存储初探">
-<meta property="og:url" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/index.html">
+<meta property="og:title" content="websocket介绍以及配合Stomp的使用">
+<meta property="og:url" content="https://fx-team.github.io/2018/01/21/websocket介绍以及配合Stomp的使用/index.html">
 <meta property="og:site_name" content="fx-team">
-<meta property="og:description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg">
-<meta property="og:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/youku_cookie.jpg">
-<meta property="og:updated_time" content="2018-01-19T07:54:36.047Z">
+<meta property="og:description" content="由于近期需要使用websocket的部分功能，然而在工作过程中，发现自己对这部分知识点不是很了解，而且对于后台同学提出的websocket和stomp的组合，不知如何下手。经过相关资料查证，分享与大家，如有纰漏，希望不吝指出。本文行文为三个部分，分别讲述：socket是什么，websocket是什么，stomp是什么，如何结合后两者投入使用。   1. socket目前来说，我们经常说的socke">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2018-01-21T03:44:54.053Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="前端浏览器存储初探">
-<meta name="twitter:description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
-<meta name="twitter:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg">
+<meta name="twitter:title" content="websocket介绍以及配合Stomp的使用">
+<meta name="twitter:description" content="由于近期需要使用websocket的部分功能，然而在工作过程中，发现自己对这部分知识点不是很了解，而且对于后台同学提出的websocket和stomp的组合，不知如何下手。经过相关资料查证，分享与大家，如有纰漏，希望不吝指出。本文行文为三个部分，分别讲述：socket是什么，websocket是什么，stomp是什么，如何结合后两者投入使用。   1. socket目前来说，我们经常说的socke">
 
 
 
@@ -110,7 +108,7 @@
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
-      author: '博主'
+      author: 'Author'
     },
     algolia: {
       applicationID: '',
@@ -124,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/"/>
+  <link rel="canonical" href="https://fx-team.github.io/2018/01/21/websocket介绍以及配合Stomp的使用/"/>
 
 
 
 
 
-  <title>标签: 技术周刊 | fx-team</title>
+  <title>Tag: 技术周刊 | fx-team</title>
   
 
 
@@ -142,7 +140,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
 
   
   
@@ -192,7 +190,7 @@
             
 
             
-              首页
+              Startseite
             
 
           </a>
@@ -206,7 +204,7 @@
             
 
             
-              归档
+              Archiv
             
 
           </a>
@@ -238,7 +236,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>技术周刊<small>标签</small>
+        <h1>技术周刊<small>Tag</small>
         </h1>
       </div>
 
@@ -250,35 +248,7 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2018/01/19/前端技术周刊-2018-01-19/" itemprop="url">
-              
-                <span itemprop="name">前端技术周刊 - 2018/01/19</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-19T16:14:41+08:00"
-              content="2018-01-19" >
-          01-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/12/前端技术周刊-2018.01.12/" itemprop="url">
+            <a class="post-title-link" href="/2018/01/12/前端技术周刊 - 2018.01.12/" itemprop="url">
               
                 <span itemprop="name">前端技术周刊 - 2018/01/12</span>
               
@@ -306,7 +276,7 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2018/01/05/前端技术周刊-2018.01.05/" itemprop="url">
+            <a class="post-title-link" href="/2018/01/05/前端技术周刊 - 2018.01.05/" itemprop="url">
               
                 <span itemprop="name">前端技术周刊 - 2018/01/05</span>
               
@@ -379,7 +349,7 @@
                   <a href="/archives/">
                 
                     <span class="site-state-item-count">6</span>
-                    <span class="site-state-item-name">日志</span>
+                    <span class="site-state-item-name">Artikel</span>
                   </a>
                 </div>
               
@@ -391,8 +361,8 @@
                 
                 <div class="site-state-item site-state-tags">
                   
-                    <span class="site-state-item-count">3</span>
-                    <span class="site-state-item-name">标签</span>
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">Tags</span>
                   
                 </div>
               
@@ -447,7 +417,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -455,7 +425,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
 
 
 

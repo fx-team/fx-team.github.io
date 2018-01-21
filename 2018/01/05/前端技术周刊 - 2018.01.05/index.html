@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next muse use-motion" lang="zh">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -64,7 +64,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="websocket, stomp," />
 
 
 
@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta name="description" content="由于近期需要使用websocket的部分功能，然而在工作过程中，发现自己对这部分知识点不是很了解，而且对于后台同学提出的websocket和stomp的组合，不知如何下手。经过相关资料查证，分享与大家，如有纰漏，希望不吝指出。本文行文为三个部分，分别讲述：socket是什么，websocket是什么，stomp是什么，如何结合后两者投入使用。   1. socket目前来说，我们经常说的socke">
+<meta name="keywords" content="websocket, stomp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前端浏览器存储初探">
-<meta property="og:url" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/index.html">
+<meta property="og:title" content="websocket介绍以及配合Stomp的使用">
+<meta property="og:url" content="https://fx-team.github.io/2018/01/21/websocket介绍以及配合Stomp的使用/index.html">
 <meta property="og:site_name" content="fx-team">
-<meta property="og:description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg">
-<meta property="og:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/youku_cookie.jpg">
-<meta property="og:updated_time" content="2018-01-19T07:54:36.047Z">
+<meta property="og:description" content="由于近期需要使用websocket的部分功能，然而在工作过程中，发现自己对这部分知识点不是很了解，而且对于后台同学提出的websocket和stomp的组合，不知如何下手。经过相关资料查证，分享与大家，如有纰漏，希望不吝指出。本文行文为三个部分，分别讲述：socket是什么，websocket是什么，stomp是什么，如何结合后两者投入使用。   1. socket目前来说，我们经常说的socke">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2018-01-21T03:44:54.053Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="前端浏览器存储初探">
-<meta name="twitter:description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
-<meta name="twitter:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg">
+<meta name="twitter:title" content="websocket介绍以及配合Stomp的使用">
+<meta name="twitter:description" content="由于近期需要使用websocket的部分功能，然而在工作过程中，发现自己对这部分知识点不是很了解，而且对于后台同学提出的websocket和stomp的组合，不知如何下手。经过相关资料查证，分享与大家，如有纰漏，希望不吝指出。本文行文为三个部分，分别讲述：socket是什么，websocket是什么，stomp是什么，如何结合后两者投入使用。   1. socket目前来说，我们经常说的socke">
 
 
 
@@ -110,7 +108,7 @@
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
-      author: '博主'
+      author: 'Author'
     },
     algolia: {
       applicationID: '',
@@ -124,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/"/>
+  <link rel="canonical" href="https://fx-team.github.io/2018/01/21/websocket介绍以及配合Stomp的使用/"/>
 
 
 
 
 
-  <title>前端技术周刊 - 2018/01/12 | fx-team</title>
+  <title>前端技术周刊 - 2018/01/05 | fx-team</title>
   
 
 
@@ -142,7 +140,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
 
   
   
@@ -192,7 +190,7 @@
             
 
             
-              首页
+              Startseite
             
 
           </a>
@@ -206,7 +204,7 @@
             
 
             
-              归档
+              Archiv
             
 
           </a>
@@ -247,7 +245,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/12/前端技术周刊-2018.01.12/">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/05/前端技术周刊 - 2018.01.05/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
@@ -264,7 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">前端技术周刊 - 2018/01/12</h1>
+          <h1 class="post-title" itemprop="name headline">前端技术周刊 - 2018/01/05</h1>
         
 
         <div class="post-meta">
@@ -274,9 +272,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-12T16:40:04+08:00">2018-01-12</time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-05T18:13:33+08:00">2018-01-05</time>
             
 
             
@@ -312,10 +310,13 @@
       
 
       
-        <p><a href="https://www.w3ctech.com/topic/866" target="_blank" rel="noopener">Service Worker 入门</a><br><em>原生App拥有Web应用通常所不具备的富离线体验，定时的静默更新，消息通知推送等功能。而新的Service workers标准让在Web App上拥有这些功能成为可能。</em></p>
-<p><a href="https://medium.mybridge.co/node-js-open-source-for-the-past-year-v-2018-757291e638ed" target="_blank" rel="noopener">2017 年发布的优秀 Node.js 开源项目盘点</a><br><em>2017 年里， Node.js 社区也愈发活跃；本文从 4700 多个去年发布的 Node.js 开源项目中，挑选出 25 个优秀的代表。这些项目涵盖了不同的功能方向，譬如 Headless Chrome Node API Puppeteer, 用于创建模拟数据的 faker.js，用于将 Node.js 项目打包为可执行文件的 Pkg，用于进行图片处理的 Sharp，用于进行 Docker 界面化管理的 Portainer 等等。</em></p>
-<p><a href="https://isux.tencent.com/articles/isux-h5-in-iphone.html" target="_blank" rel="noopener">极速适配 iPhone X 秘笈</a><br><em>2017年9月苹果发布了iPhone X机型，对于它的“刘海儿”和底部Home Indicator，QQ空间H5也在第一时间做了兼容适配。在适配过程中，尝试的方案介绍。</em></p>
-<p><a href="http://taobaofed.org/blog/2017/05/18/how-to-display-git-diff/" target="_blank" rel="noopener">如何实现一个 Git Diff 解析器</a><br><em>代码审阅中一个重要功能是对两个 commit 进行 diff 并展示到页面中，这篇文章将尝试总结其实现过程。</em></p>
+        <p><a href="http://36kr.com/p/5110763.html" target="_blank" rel="noopener">2018 年最值得关注的 JavaScript 趋势</a><br><em>JavaScript渗透的范围越来越广，它能做的事情已经远不止前端开发而已。不久前stateofjs.com刚刚发布了2017 JavaScript现状报告，现在Ryan Chartrand非常应景地推出了2018年的JavaScript发展趋势，把这两份文章一起结合来看，相信作为JS开发者的你一定不再迷茫。</em></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651000212&amp;idx=1&amp;sn=753c242f4132347737fa854a514cfe35" target="_blank" rel="noopener">2017技术圈年度大事件盘点</a></p>
+<p><em>年终总结的意义在于，总结过去，展望未来。在这即将过去的 2017 年，回顾技术圈年度大事件。</em></p>
+<p><a href="https://zhuanlan.zhihu.com/p/32372885" target="_blank" rel="noopener">解读 2017 年终全球 JavaScript 技术调查结果</a></p>
+<p><em>结合 stateofjs 公布的 2017 年关于 JavaScript 全球调查结果来解读下即将要过去的这一年的 JavaScript 技术相关情况。</em></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzIwNjQwMzUwMQ==&amp;mid=2247485600&amp;idx=1&amp;sn=12e229c90cc08e8f14dcc1ae7f27abd6" target="_blank" rel="noopener">PWA是否能带来新一轮大前端技术洗牌</a></p>
+<p><em>对于 Native App 来说，其 最大的痛点是由于其天生封闭的基因，内容无法被索引，这会导致后续一系列的问题。而随着移动互联网的发展，用户下载 App 的热情也逐渐减弱，再加上用户 80% 的时间被 Top3 的超级 App 占据，对于站点来说，应用分发成本也因此越来越高了。相对于 Native App 的封闭，PWA 却是完全开放的——PWA 现有的所有技术都是遵循 W3C 的标准，完全开放，因此能够快速被站点接受、被浏览器快速支持。值得一提的是，为了解开传统 Web 的两个枷锁，除 PWA 之外，业界也诞生了很多技术方案，例如部分厂商推出的小程序技术。</em></p>
 
       
     </div>
@@ -346,8 +347,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/08/Phaser开发游戏总结/" rel="next" title="Phaser开发游戏总结">
-                <i class="fa fa-chevron-left"></i> Phaser开发游戏总结
+              <a href="/2018/01/04/新的开始/" rel="next" title="新的开始">
+                <i class="fa fa-chevron-left"></i> 新的开始
               </a>
             
           </div>
@@ -356,8 +357,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/01/13/前端浏览器存储初探/" rel="prev" title="前端浏览器存储初探">
-                前端浏览器存储初探 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/01/08/Phaser开发游戏总结/" rel="prev" title="Phaser开发游戏总结">
+                Phaser开发游戏总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -427,7 +428,7 @@
                   <a href="/archives/">
                 
                     <span class="site-state-item-count">6</span>
-                    <span class="site-state-item-name">日志</span>
+                    <span class="site-state-item-name">Artikel</span>
                   </a>
                 </div>
               
@@ -439,8 +440,8 @@
                 
                 <div class="site-state-item site-state-tags">
                   
-                    <span class="site-state-item-count">3</span>
-                    <span class="site-state-item-name">标签</span>
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">Tags</span>
                   
                 </div>
               
@@ -495,7 +496,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
@@ -503,7 +504,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
 
 
 
