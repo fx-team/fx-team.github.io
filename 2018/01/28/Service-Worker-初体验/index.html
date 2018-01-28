@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.0" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Service Worker sw caches," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="fx-team" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="一、什么是 PWA？Progressive Web App, 简称 PWA，是提升 Web App 的体验的一种新方法，能给用户原生应用的体验。 PWA 能做到原生应用的体验不是靠特指某一项技术，而是经过应用一些新技术进行改进，在安全、性能和体验三个方面都有很大提升，PWA 本质上是 Web App，借助一些新技术也具备了 Native App 的一些特性，兼具 Web App 和 Native">
+<meta name="keywords" content="Service Worker sw caches">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Service Worker 初体验">
+<meta property="og:url" content="https://fx-team.github.io/2018/01/28/Service-Worker-初体验/index.html">
+<meta property="og:site_name" content="fx-team">
+<meta property="og:description" content="一、什么是 PWA？Progressive Web App, 简称 PWA，是提升 Web App 的体验的一种新方法，能给用户原生应用的体验。 PWA 能做到原生应用的体验不是靠特指某一项技术，而是经过应用一些新技术进行改进，在安全、性能和体验三个方面都有很大提升，PWA 本质上是 Web App，借助一些新技术也具备了 Native App 的一些特性，兼具 Web App 和 Native">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-28T16:16:10.393Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Service Worker 初体验">
+<meta name="twitter:description" content="一、什么是 PWA？Progressive Web App, 简称 PWA，是提升 Web App 的体验的一种新方法，能给用户原生应用的体验。 PWA 能做到原生应用的体验不是靠特指某一项技术，而是经过应用一些新技术进行改进，在安全、性能和体验三个方面都有很大提升，PWA 本质上是 Web App，借助一些新技术也具备了 Native App 的一些特性，兼具 Web App 和 Native">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://fx-team.github.io/2018/01/28/Service-Worker-初体验/"/>
+
+
+
+
+
+  <title>Service Worker 初体验 | fx-team</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">fx-team</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+
+            
+              首页
+            
+
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+
+            
+              归档
+            
+
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/28/Service-Worker-初体验/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fx-team">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Service Worker 初体验</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-28T23:33:03+08:00">2018-01-28</time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、什么是-PWA？"><a href="#一、什么是-PWA？" class="headerlink" title="一、什么是 PWA？"></a>一、什么是 PWA？</h2><p>Progressive Web App, 简称 PWA，是提升 Web App 的体验的一种新方法，能给用户原生应用的体验。</p>
+<p>PWA 能做到原生应用的体验不是靠特指某一项技术，而是经过应用一些新技术进行改进，在安全、性能和体验三个方面都有很大提升，PWA 本质上是 Web App，借助一些新技术也具备了 Native App 的一些特性，兼具 Web App 和 Native App 的优点。</p>
+<p><strong>关键技术之一：Service Worker</strong></p>
+<p>当用户打开我们站点时（从桌面 icon 或者从浏览器），通过 Service Worker 能够让用户在网络条件很差的情况下也能瞬间加载并且展现。</p>
+<p>Service Worker 是用 JavaScript 编写的 JS 文件，能够代理请求，并且能够操作浏览器缓存，通过将缓存的内容直接返回，让请求能够瞬间完成。开发者可以预存储关键文件，可以淘汰过期的文件等等，给用户提供可靠的体验。<br><a id="more"></a></p>
+<h2 id="二、技术铺垫"><a href="#二、技术铺垫" class="headerlink" title="二、技术铺垫"></a>二、技术铺垫</h2><h4 id="1、全局作用域self"><a href="#1、全局作用域self" class="headerlink" title="1、全局作用域self"></a>1、全局作用域self</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span> === self                  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">window</span>.window === <span class="built_in">window</span>.self    <span class="comment">// true</span></span><br><span class="line"><span class="built_in">window</span>.self === self             <span class="comment">// true</span></span><br><span class="line"><span class="built_in">window</span>.window === self           <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>从上图可以看出传统 web 页面中，window 和 self是完全相等的。</p>
+<p>传统的web页面的JavaScript脚本是单线程的，这个线程主要与浏览器窗口打交道，主要作用就是实现浏览器窗体内的元素交互效果，因此只要是全局对象，都可以使用 window 对象来获取。</p>
+<p>Service Worker 是运行在浏览器上开辟的一个新线程，浏览器背后悄悄运行的线程，所以没有 window 对象，会使用 self 获取当前运行环境的上下文，即使用 self 来表示全局作用域。</p>
+<h4 id="2、Cache-Storage"><a href="#2、Cache-Storage" class="headerlink" title="2、Cache Storage"></a>2、Cache Storage</h4><p>Cache Storage 可以用变量 caches 来引用，以下是 Cache Storage 的主要 API介绍</p>
+<ul>
+<li>caches.open(cacheName) 用于获取一个 Cache 对象实例。</li>
+<li>caches.match() 用于检查 CacheStorage 中是否存在以Request 为 key 的 Cache 对象。</li>
+<li>caches.has() 用于检查是否存在指定名称的 Cache 对象。</li>
+<li>caches.keys() 用于返回 CacheStorage 中所有 Cache 对象的 cacheName 列表。</li>
+<li>caches.delete() 用于删除指定 cacheName 的 Cache 对象。<br>Cache Storage 通过 cacheName 标记缓存版本，所以就会存在多个版本的 Cache Storage 资源。为什么需要 cacheName 来标记版本呢？</li>
+</ul>
+<p>假设当前域名下所有的覆盖式发布的静态资源和接口数据全部存储在同一个 cacheName 里面，业务部署更新后，无法识别旧的冗余资源，单靠前端无法完全清除。这是因为 Service Worker 不知道完整的静态资源路径表，只能在客户端发起请求时去做判断，那些当前不会用到的资源不代表以后一定不会使用到。假如静态资源是非覆盖式发布，那么冗余的资源就更多了。这里要特别注意的是，Cache 不会过期，只能显式删除。</p>
+<h4 id="3、Cache"><a href="#3、Cache" class="headerlink" title="3、Cache"></a>3、Cache</h4><p>规范里 Cache 对应内核的 ServiceWorkerCache 对象，提供了已缓存的 Request / Response 对象体的存储管理机制。它提供了一系列管理存储的 JS 接口：</p>
+<ul>
+<li>cache.put() 用于把 Request / Response 对象体放进指定的 Cache。</li>
+<li>cache.add() 用于获取一个 Request 的 Response，并将 Request / Response 对象体放进指定的 Cache。注：等价于 fetch(request) + Cache.put(request, response)。</li>
+<li>cache.addAll() 用于获取一组 Request 的 Response，并将该组 Request / Response 对象体放进指定的Cache。</li>
+<li>cache.keys() 用于获取 Cache 中所有 key。</li>
+<li>cache.match() 用于查找是否存在以 Request 为 key 的 Cache 对象。</li>
+<li>cache.matchAll() 用于查找是否存在一组以 Request 为 key 的 Cache 对象组。</li>
+<li>cache.delete() 用于删除以 Request 为 key 的 Cache Entry。注意，Cache 不会过期，只能显式删除 。</li>
+</ul>
+<h2 id="三、Service-Worker"><a href="#三、Service-Worker" class="headerlink" title="三、Service Worker"></a>三、Service Worker</h2><h4 id="1、Service-Worker概念和用法"><a href="#1、Service-Worker概念和用法" class="headerlink" title="1、Service Worker概念和用法"></a>1、Service Worker概念和用法</h4><p>我们平常浏览器窗口中跑的页面运行的是主JavaScript线程，DOM和window全局变量都是可以访问的。而Service Worker是走的另外的线程，可理解为在浏览器背后默默运行的一个线程，脱离浏览器窗体，因此，window以及DOM都是不能访问的，此时我们可以使用之前讲到的self访问全局上下文。</p>
+<p>由于Service Worker走的是另外的线程，因此，Service Worker不会阻塞主JavaScript线程，也就是不会引起浏览器页面加载的卡顿之类。同时，由于Service Worker设计基于Promise，完全异步，同步API（如XHR和localStorage）不能在Service Worker中使用。</p>
+<p>Service Worker对我们的协议也有要求，就是必须是https协议的，不过本地开发Service Worker在<a href="http://localhost或者http://127.0.0.1这种本地环境可以直接运行。如果想线上真是环境预览，可以考虑借助Github" target="_blank" rel="noopener">http://localhost或者http://127.0.0.1这种本地环境可以直接运行。如果想线上真是环境预览，可以考虑借助Github</a> pages，因为它是https协议的。</p>
+<h4 id="2、Service-Worker生命周期"><a href="#2、Service-Worker生命周期" class="headerlink" title="2、Service Worker生命周期"></a>2、Service Worker生命周期</h4><p>Service Worker注册时候的生命周期是这样的：</p>
+<ol>
+<li>Download – 下载注册的JS文件</li>
+<li>Install – 安装</li>
+<li>Activate – 激活</li>
+</ol>
+<p>一旦安装完成，如果注册的JS没有变化，则直接显示当前激活态。</p>
+<p>用线把整个流程链接起来就是下面这样： </p>
+<p>注册成功-installing————–&gt; 安装成功（installed）(waiting) ———activating———-&gt; 激活成功 (activated)——&gt; 销毁（redundant）</p>
+<p>其中任何一个步骤失败都将进入销毁（redundant）</p>
+<h4 id="2、Service-Worker-对应的事件名"><a href="#2、Service-Worker-对应的事件名" class="headerlink" title="2、Service Worker 对应的事件名"></a>2、Service Worker 对应的事件名</h4><ol>
+<li>self.addEventListener(‘install’, function(event) { /<em> 安装后… </em>/ });</li>
+<li>self.addEventListener(‘activate’, function(event) { /<em> 激活后… </em>/ });</li>
+<li>elf.addEventListener(‘fetch’, function(event) { /<em> 请求后… </em>/ });</li>
+</ol>
+<p>install 事件是服务工作线程获取的第一个事件，并且它仅发生一次。</p>
+<p>传递到 installEvent.waitUntil() 的一个 promise 可表明安装的持续时间以及安装是否成功。</p>
+<p>在成功完成安装并处于“activate活动状态”之前，服务工作线程不会收到 fetch 和 push 等事件。</p>
+<p>默认情况下，不会通过服务工作线程获取页面，除非页面请求本身需要执行服务工作线程。 因此，您需要刷新页面以查看服务工作线程的影响。</p>
+<p>clients.claim() 可替换此默认值，并控制未控制的页面。</p>
+<h2 id="四、简单的-PWA-方案"><a href="#四、简单的-PWA-方案" class="headerlink" title="四、简单的 PWA 方案"></a>四、简单的 PWA 方案</h2><p><strong>主要使用的技术</strong></p>
+<ol>
+<li>App Manifest </li>
+<li>Service Worker</li>
+<li>cacheStorage</li>
+</ol>
+<h4 id="1、-App-Manifest"><a href="#1、-App-Manifest" class="headerlink" title="1、 App Manifest"></a>1、 App Manifest</h4><p>添加 manifest.json 文件。</p>
+<p>为了让 PWA 应用被添加到主屏幕, 使用 manifest.json 定义应用的名称, 图标等等信息。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"pwa名称"</span>,</span><br><span class="line">  <span class="attr">"short_name"</span>: <span class="string">"pwa名称"</span>,</span><br><span class="line">  <span class="attr">"display"</span>: <span class="string">"standalone"</span>,</span><br><span class="line">  <span class="attr">"start_url"</span>: <span class="string">"/"</span>,</span><br><span class="line">  <span class="attr">"theme_color"</span>: <span class="string">"#8888ff"</span>,</span><br><span class="line">  <span class="attr">"background_color"</span>: <span class="string">"#aaaaff"</span>,</span><br><span class="line">  <span class="attr">"icons"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"src"</span>: <span class="string">"e.png"</span>,</span><br><span class="line">      <span class="attr">"sizes"</span>: <span class="string">"256x256"</span>,</span><br><span class="line">      <span class="attr">"type"</span>: <span class="string">"image/png"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后引入到html的head中，<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"manifest"</span> <span class="attr">href</span>=<span class="string">"manifest.json"</span> /&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="2、Service-Worker"><a href="#2、Service-Worker" class="headerlink" title="2、Service Worker"></a>2、Service Worker</h4><p>主要操作是：</p>
+<ol>
+<li>注册完成安装 Service Worker 时, 抓取资源写入缓存； </li>
+<li>网页抓取资源的过程中, 在 Service Worker 可以捕获到 fetch 事件, 编写代码如何响应资源的请求；</li>
+<li>最后一步是更新静态资源的功能。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (navigator.serviceWorker != <span class="literal">null</span>) &#123;</span><br><span class="line">	navigator.serviceWorker.register(<span class="string">'sw.js'</span>)</span><br><span class="line">	.then(<span class="function"><span class="keyword">function</span>(<span class="params">registration</span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'Registered events at scope: '</span>, registration.scope);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sw.js</span></span><br><span class="line"><span class="keyword">var</span> cacheStorageKey = <span class="string">'minimal-pwa-1'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> cacheList = [</span><br><span class="line">  <span class="string">'/'</span>,</span><br><span class="line">  <span class="string">"index.html"</span>,</span><br><span class="line">  <span class="string">"style.css"</span>,</span><br><span class="line">  <span class="string">"img.png"</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 抓取资源写入缓存</span></span><br><span class="line">self.addEventListener(<span class="string">'install'</span>, e =&gt; &#123;</span><br><span class="line">  e.waitUntil(</span><br><span class="line">    caches.open(cacheStorageKey)</span><br><span class="line">    .then(<span class="function"><span class="params">cache</span> =&gt;</span> cache.addAll(cacheList))</span><br><span class="line">    .then(<span class="function"><span class="params">()</span> =&gt;</span> self.skipWaiting())</span><br><span class="line">  )</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 捕获到 fetch 事件, 编写代码如何响应资源的请求</span></span><br><span class="line">self.addEventListener(<span class="string">'fetch'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  e.respondWith(</span><br><span class="line">    caches.match(e.request).then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (response != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> fetch(e.request.url)</span><br><span class="line">    &#125;)</span><br><span class="line">  )</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//更新静态资源</span></span><br><span class="line">self.addEventListener(<span class="string">'activate'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  e.waitUntil(</span><br><span class="line">    <span class="built_in">Promise</span>.all(</span><br><span class="line">      caches.keys().then(<span class="function"><span class="params">cacheNames</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> cacheNames.each(<span class="function"><span class="params">name</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (name !== cacheStorageKey) &#123;</span><br><span class="line">            <span class="keyword">return</span> caches.delete(name)</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;)</span><br><span class="line">    ).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> self.clients.claim()</span><br><span class="line">    &#125;)</span><br><span class="line">  )</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>以上的功能都准备好就可以简单的生成一个 PWA 的网站了。可以使用支持 PWA 的手机进行预览，根据提示增加到桌面。</p>
+<h2 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h2><ol>
+<li><a href="https://developers.google.cn/web/fundamentals/primers/service-workers/?hl=zh-cn" target="_blank" rel="noopener">服务工作线程：简介</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/ServiceWorker" target="_blank" rel="noopener">Web 技术文档 Web API 接口 ServiceWorker</a></li>
+<li><a href="http://www.zhangxinxu.com/wordpress/2017/07/service-worker-cachestorage-offline-develop/" target="_blank" rel="noopener">借助Service Worker和cacheStorage缓存及离线开发</a></li>
+<li><a href="https://lzw.me/a/pwa-service-worker.html" target="_blank" rel="noopener">网站渐进式增强体验(PWA)改造：Service Worker 应用详解</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/25524382" target="_blank" rel="noopener">PWA 入门: 理解和创建 Service Worker 脚本</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Service-Worker-sw-caches/" rel="tag"># Service Worker sw caches</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/26/前端技术周刊-2018-01-26/" rel="next" title="前端技术周刊 - 2018/01/26">
+                <i class="fa fa-chevron-left"></i> 前端技术周刊 - 2018/01/26
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">一个富有想象力的前端团队fx-team</p>
+              <p class="site-description motion-element" itemprop="description">一个富有想象力的前端团队</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、什么是-PWA？"><span class="nav-number">1.</span> <span class="nav-text">一、什么是 PWA？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、技术铺垫"><span class="nav-number">2.</span> <span class="nav-text">二、技术铺垫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、全局作用域self"><span class="nav-number">2.0.1.</span> <span class="nav-text">1、全局作用域self</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、Cache-Storage"><span class="nav-number">2.0.2.</span> <span class="nav-text">2、Cache Storage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、Cache"><span class="nav-number">2.0.3.</span> <span class="nav-text">3、Cache</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、Service-Worker"><span class="nav-number">3.</span> <span class="nav-text">三、Service Worker</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、Service-Worker概念和用法"><span class="nav-number">3.0.1.</span> <span class="nav-text">1、Service Worker概念和用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、Service-Worker生命周期"><span class="nav-number">3.0.2.</span> <span class="nav-text">2、Service Worker生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、Service-Worker-对应的事件名"><span class="nav-number">3.0.3.</span> <span class="nav-text">2、Service Worker 对应的事件名</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、简单的-PWA-方案"><span class="nav-number">4.</span> <span class="nav-text">四、简单的 PWA 方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、-App-Manifest"><span class="nav-number">4.0.1.</span> <span class="nav-text">1、 App Manifest</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、Service-Worker"><span class="nav-number">4.0.2.</span> <span class="nav-text">2、Service Worker</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献："><span class="nav-number">5.</span> <span class="nav-text">参考文献：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一个富有想象力的前端团队fx-team</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
