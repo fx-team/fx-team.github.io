@@ -338,11 +338,14 @@
 <h2 id="Service-Worker"><a href="#Service-Worker" class="headerlink" title="Service Worker"></a>Service Worker</h2><h3 id="Service-Worker-的概念和用法"><a href="#Service-Worker-的概念和用法" class="headerlink" title="Service Worker 的概念和用法"></a>Service Worker 的概念和用法</h3><p>下面我们将进入主要部分，Service Worker 的介绍和用法。<br>我们平常浏览器窗口中跑的页面运行的是主 JavaScript 线程，DOM 和 window 全局变量都是可以访问的。而 Service Worker 是走的另外的线程，可理解为在浏览器背后默默运行的一个线程，脱离浏览器窗体，因此，window 以及 DOM 都是不能访问的，此时我们可以使用之前讲到的 self 访问全局上下文。<br>由于 Service Worker 走的是另外的线程，因此，Service Worker 不会阻塞主 JavaScript 线程，也就是不会引起浏览器页面加载的卡顿之类。同时，由于 Service Worker 设计基于 Promise，完全异步，同步 API（如 XHR 和 localStorage ）不能在 Service Worker 中使用。<br>Service Worker 对我们的协议也有要求，就是必须是 https 协议的，不过本地开发 Service Worker 在 http://<span></span>localhost 或者 http://<span></span>127.0.0.1 这种本地环境可以直接运行。如果想线上真是环境预览，可以考虑借助 Github pages，因为它是 https 协议的。</p>
 <h3 id="Service-Worker的生命周期"><a href="#Service-Worker的生命周期" class="headerlink" title="Service Worker的生命周期"></a>Service Worker的生命周期</h3><p>Service Worker 注册时候的生命周期是这样的：</p>
 <ol>
-<li>Download – 下载注册的JS文件</li>
-<li>Install – 安装</li>
-<li>Activate – 激活</li>
+<li>下载注册的JS文件，并解析执行</li>
+<li>安装注册</li>
+<li>安装成功或等待</li>
+<li>激活中</li>
+<li>激活成功</li>
+<li>销毁</li>
 </ol>
-<p>一旦安装完成，如果注册的JS没有变化，则直接显示当前激活态。<br>用线把整个流程链接起来就是下面这样：<br>注册成功（installing）–&gt; 安装成功（installed）(waiting) –&gt; 激活中（activating） –&gt; 激活成功 (activated) –&gt; 销毁（redundant）<br>其中任何一个步骤失败都将进入销毁（redundant）。</p>
+<p>一旦安装完成，如果注册的JS没有变化，则直接显示当前激活态。<br>用线把整个流程链接起来就是下面这样：<br><img src="/2018/01/28/PWA%20方案相关技术分享/sw.png" title="Service Worker 生命周期示意图"><br>其中任何一个步骤失败都将进入销毁（redundant）。</p>
 <h3 id="Service-Worker-的对应的事件名"><a href="#Service-Worker-的对应的事件名" class="headerlink" title="Service Worker 的对应的事件名"></a>Service Worker 的对应的事件名</h3><ol>
 <li>self.addEventListener(‘install’, function(event) { /<em> 安装后… </em>/ });</li>
 <li>self.addEventListener(‘activate’, function(event) { /<em> 激活后… </em>/ });</li>
