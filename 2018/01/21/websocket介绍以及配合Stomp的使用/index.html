@@ -88,7 +88,7 @@
 <meta property="og:description" content="前言：上周做了一个预约健身卡的项目，在领导的指引下使用了 LAVAS 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://fx-team.github.io/2018/01/28/PWA%20方案相关技术分享/sw.png">
-<meta property="og:updated_time" content="2018-01-31T03:35:01.961Z">
+<meta property="og:updated_time" content="2018-01-31T06:01:59.278Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PWA 方案相关技术分享">
 <meta name="twitter:description" content="前言：上周做了一个预约健身卡的项目，在领导的指引下使用了 LAVAS 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。">
@@ -312,7 +312,7 @@
       
 
       
-        <p>由于近期需要使用 WebSocket 的部分功能，然而在工作过程中，发现自己对这部分知识点不是很了解，而且对于后台同学提出的 WebSocket 和 STOMP 的组合，不知如何下手。经过相关资料查证，分享与大家，如有纰漏，希望不吝指出。<br>本文行文为三个部分，分别讲述：Socket 是什么，WebSocket 是什么，STOMP 是什么，如何结合后两者投入使用。<br><a id="more"></a></p>
+        <p>由于近期需要使用 WebSocket 的部分功能，然而在工作过程中，发现自己对这部分知识点不是很了解，而且对于后台同学提出的 WebSocket 和 STOMP 的组合，不知如何下手。经过相关资料查证，分享与大家，如有纰漏，希望不吝指出。<br>本文行文为三个部分，分别讲述：Socket 是什么，WebSocket 是什么，STOMP 是什么，如何结合后两者投入使用。  </p>
 <h2 id="1-Socket"><a href="#1-Socket" class="headerlink" title="1. Socket"></a>1. Socket</h2><p>目前来说，我们经常说的 Socket 的有好几种意思，而且这几种意思还都与通信有关，他们分别是： </p>
 <ol>
 <li>Socket 连接<br>socket 连接，是端到端的一种连接方式，连接上之后，双方可以互发数据，完成交互；socket 连接的建立也是一个三次握手的过程，经过这个过程之后，双方都可以通过事件监听来获取来自对方的消息(connect, data, close …）,也可以主动发送消息给对方（Socket.write）。Socket 连接在不同语言的网络模块均有提供，以上方法都是 node 的 net 模块提供的一些方法和事件，可以用来建立一个完整的 socket 连接。</li>

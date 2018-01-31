@@ -88,7 +88,7 @@
 <meta property="og:description" content="前言：上周做了一个预约健身卡的项目，在领导的指引下使用了 LAVAS 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://fx-team.github.io/2018/01/28/PWA%20方案相关技术分享/sw.png">
-<meta property="og:updated_time" content="2018-01-31T03:35:01.961Z">
+<meta property="og:updated_time" content="2018-01-31T06:01:59.278Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PWA 方案相关技术分享">
 <meta name="twitter:description" content="前言：上周做了一个预约健身卡的项目，在领导的指引下使用了 LAVAS 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。">
@@ -312,9 +312,8 @@
       
 
       
-        <p>前言：<br>上周做了一个预约健身卡的项目，在领导的指引下使用了 <a href="https://lavas.baidu.com" target="_blank" rel="noopener">LAVAS</a> 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。<br>在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。<br>在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。</p>
+        <p>前言：<br>上周做了一个预约健身卡的项目，在领导的指引下使用了 <a href="https://lavas.baidu.com" target="_blank" rel="noopener">LAVAS</a> 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。<br>在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。<br>在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。<br><a id="more"></a></p>
 <h1 id="什么是-PWA？"><a href="#什么是-PWA？" class="headerlink" title="什么是 PWA？"></a>什么是 PWA？</h1><p>Progressive Web App, 简称 PWA，是提升 Web App 的体验的一种新方法，能给用户原生应用的体验。<br>PWA 能做到原生应用的体验不是靠特指某一项技术，而是经过应用一些新技术进行改进，在安全、性能和体验三个方面都有很大提升，PWA 本质上是 Web App，借助一些新技术也具备了 Native App 的一些特性，兼具 Web App 和 Native App 的优点。</p>
-<a id="more"></a>
 <h1 id="相关技术"><a href="#相关技术" class="headerlink" title="相关技术"></a>相关技术</h1><p>PWA 方案的关键技术：Service Worker。<br>当用户打开我们站点时（从桌面 icon 或者从浏览器），通过 Service Worker 能够让用户在网络条件很差的情况下也能瞬间加载并且展现。<br>Service Worker 是用 JavaScript 编写的 JS 文件，能够代理请求，并且能够操作浏览器缓存，通过将缓存的内容直接返回，让请求能够瞬间完成。开发者可以预存储关键文件，可以淘汰过期的文件等等，给用户提供可靠的体验。<br>在介绍 Service Worker 之前，需要一些必要的知识储备，下面首先介绍的是使用 Service Worker 技术时还涉及的相关其他技术 API，主要有全局作用域 self、Cache Storage 和 Cache 对象。</p>
 <h2 id="全局作用域self"><a href="#全局作用域self" class="headerlink" title="全局作用域self"></a>全局作用域self</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span> === self                  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">window</span>.window === <span class="built_in">window</span>.self    <span class="comment">// true</span></span><br><span class="line"><span class="built_in">window</span>.self === self             <span class="comment">// true</span></span><br><span class="line"><span class="built_in">window</span>.window === self           <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 <p>从上图可以看出传统 Web 页面中，window 和 self是完全相等的。<br>传统的 Web 页面的 JavaScript 脚本是单线程的，这个线程主要与浏览器窗口打交道，主要作用就是实现浏览器窗体内的元素交互效果，因此只要是全局对象，都可以使用 window 对象来获取。<br>Service Worker 是运行在浏览器上开辟的一个新线程，浏览器背后悄悄运行的线程，所以没有 window 对象，会使用 self 获取当前运行环境的上下文，即使用 self 来表示全局作用域。</p>
