@@ -64,7 +64,7 @@
 
 
 
-  <meta name="keywords" content="技术周刊," />
+  <meta name="keywords" content="Service Worker," />
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="2017年 JavaScript 明星项目通过对比各项目过去 12 个月在 GitHub 上新增 Star 数量，来评估其在 2017 年度的受关注程度，进而选出2017 年度 JavaScript 领域崛起的明星项目。Vue.js 再次强势登顶年度排行榜冠军，今年在 GitHub 上新增了超过 40,000 的 star。 React Native 网络层分析“在使用 React Native">
-<meta name="keywords" content="技术周刊">
+<meta name="description" content="前言：上周做了一个预约健身卡的项目，在领导的指引下使用了 LAVAS 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。">
+<meta name="keywords" content="Service Worker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前端技术周刊 - 2018&#x2F;01&#x2F;26">
-<meta property="og:url" content="https://fx-team.github.io/2018/01/26/前端技术周刊-2018-01-26/index.html">
+<meta property="og:title" content="PWA 方案相关技术分享">
+<meta property="og:url" content="https://fx-team.github.io/2018/01/28/PWA 方案相关技术分享/index.html">
 <meta property="og:site_name" content="fx-team">
-<meta property="og:description" content="2017年 JavaScript 明星项目通过对比各项目过去 12 个月在 GitHub 上新增 Star 数量，来评估其在 2017 年度的受关注程度，进而选出2017 年度 JavaScript 领域崛起的明星项目。Vue.js 再次强势登顶年度排行榜冠军，今年在 GitHub 上新增了超过 40,000 的 star。 React Native 网络层分析“在使用 React Native">
+<meta property="og:description" content="前言：上周做了一个预约健身卡的项目，在领导的指引下使用了 LAVAS 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-28T14:15:37.705Z">
+<meta property="og:image" content="https://fx-team.github.io/2018/01/28/PWA%20方案相关技术分享/sw.png">
+<meta property="og:updated_time" content="2018-01-31T03:35:01.961Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="前端技术周刊 - 2018&#x2F;01&#x2F;26">
-<meta name="twitter:description" content="2017年 JavaScript 明星项目通过对比各项目过去 12 个月在 GitHub 上新增 Star 数量，来评估其在 2017 年度的受关注程度，进而选出2017 年度 JavaScript 领域崛起的明星项目。Vue.js 再次强势登顶年度排行榜冠军，今年在 GitHub 上新增了超过 40,000 的 star。 React Native 网络层分析“在使用 React Native">
+<meta name="twitter:title" content="PWA 方案相关技术分享">
+<meta name="twitter:description" content="前言：上周做了一个预约健身卡的项目，在领导的指引下使用了 LAVAS 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。">
+<meta name="twitter:image" content="https://fx-team.github.io/2018/01/28/PWA%20方案相关技术分享/sw.png">
 
 
 
@@ -122,7 +124,7 @@
 
 
 
-  <link rel="canonical" href="https://fx-team.github.io/2018/01/26/前端技术周刊-2018-01-26/"/>
+  <link rel="canonical" href="https://fx-team.github.io/2018/01/28/PWA 方案相关技术分享/"/>
 
 
 
@@ -314,7 +316,7 @@
 
       
         
-          <p>前言：<br>上周做了一个预约健身卡的项目，在领导的指引下使用了 <a href="https://lavas.baidu.com" target="_blank" rel="noopener">lavas</a> 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。<br>在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。<br>在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。</p>
+          <p>前言：<br>上周做了一个预约健身卡的项目，在领导的指引下使用了 <a href="https://lavas.baidu.com" target="_blank" rel="noopener">LAVAS</a> 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。<br>在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。<br>在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。</p>
 <h1 id="什么是-PWA？"><a href="#什么是-PWA？" class="headerlink" title="什么是 PWA？"></a>什么是 PWA？</h1><p>Progressive Web App, 简称 PWA，是提升 Web App 的体验的一种新方法，能给用户原生应用的体验。<br>PWA 能做到原生应用的体验不是靠特指某一项技术，而是经过应用一些新技术进行改进，在安全、性能和体验三个方面都有很大提升，PWA 本质上是 Web App，借助一些新技术也具备了 Native App 的一些特性，兼具 Web App 和 Native App 的优点。</p>
           <!--noindex-->
           <div class="post-button text-center">
