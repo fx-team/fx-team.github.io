@@ -64,7 +64,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="application.js," />
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="fx-team">
-<meta property="og:url" content="https://fx-team.github.io/about/index.html">
+<meta name="description" content="koakoa 图解 koa 的核心文件有且只有 4 个（精简、流畅、易用） application.js context.js request.js response.js  今天主要解剖一下这个货 -_-&amp;gt; application.js继承自 Emitter 类，主要用于监听 error。 利用require(&amp;#39;debug&amp;#39;)(&amp;#39;koa:application&amp;#3">
+<meta name="keywords" content="application.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="koa源码解析(1)">
+<meta property="og:url" content="https://fx-team.github.io/2018/02/01/koa源码解析(1)/index.html">
 <meta property="og:site_name" content="fx-team">
-<meta property="og:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
+<meta property="og:description" content="koakoa 图解 koa 的核心文件有且只有 4 个（精简、流畅、易用） application.js context.js request.js response.js  今天主要解剖一下这个货 -_-&amp;gt; application.js继承自 Emitter 类，主要用于监听 error。 利用require(&amp;#39;debug&amp;#39;)(&amp;#39;koa:application&amp;#3">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-01T10:58:13.385Z">
+<meta property="og:updated_time" content="2018-02-01T11:27:45.521Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="fx-team">
-<meta name="twitter:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
+<meta name="twitter:title" content="koa源码解析(1)">
+<meta name="twitter:description" content="koakoa 图解 koa 的核心文件有且只有 4 个（精简、流畅、易用） application.js context.js request.js response.js  今天主要解剖一下这个货 -_-&amp;gt; application.js继承自 Emitter 类，主要用于监听 error。 利用require(&amp;#39;debug&amp;#39;)(&amp;#39;koa:application&amp;#3">
 
 
 
@@ -121,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="https://fx-team.github.io/about/"/>
+  <link rel="canonical" href="https://fx-team.github.io/2018/02/01/koa源码解析(1)/"/>
 
 
 
@@ -197,34 +198,6 @@
         </li>
       
         
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-
-            
-              关于
-            
-
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-
-            
-              标签
-            
-
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -273,12 +246,146 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/02/01/koa源码解析(1)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fx-team">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/01/koa源码解析(1)/" itemprop="url">koa源码解析(1)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-01T15:55:09+08:00">2018-02-01</time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          koakoa 图解
+koa 的核心文件有且只有 4 个（精简、流畅、易用）
+application.js
+context.js
+request.js
+response.js
+
+今天主要解剖一下这个货 -_-&gt; application.js继承自 Emitter 类，主要用于监听 error。
+利用require(&#39;debug&#39;)(&#39;koa:application&#3
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/02/01/koa源码解析(1)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/28/PWA 方案相关技术分享/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fx-team">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -400,9 +507,9 @@
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/26/前端技术周刊-2018-01-26/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fx-team">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -527,9 +634,9 @@ React Native 网络层分析“在使用 React Native
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/21/websocket介绍以及配合Stomp的使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fx-team">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -654,9 +761,9 @@ React Native 网络层分析“在使用 React Native
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/19/前端技术周刊-2018-01-19/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fx-team">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -781,9 +888,9 @@ Event Loop的规范和实现Event Loop 是前端的一个比较重要、基础�
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fx-team">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -914,9 +1021,9 @@ service w
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/12/前端技术周刊-2018.01.12/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fx-team">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1041,9 +1148,9 @@ service w
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/08/Phaser开发游戏总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fx-team">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1168,9 +1275,9 @@ service w
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/05/前端技术周刊-2018.01.05/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fx-team">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1295,9 +1402,9 @@ service w
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/04/新的开始/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fx-team">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1440,11 +1547,7 @@ service w
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/fx.jpeg"
-                alt="fx-team" />
-            
-              <p class="site-author-name" itemprop="name">fx-team</p>
+              <p class="site-author-name" itemprop="name">一个富有想象力的前端团队fx-team</p>
               <p class="site-description motion-element" itemprop="description">一个富有想象力的前端团队</p>
           </div>
 
@@ -1455,7 +1558,7 @@ service w
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1467,10 +1570,10 @@ service w
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
-                    <span class="site-state-item-count">5</span>
+                  
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">标签</span>
-                  </a>
+                  
                 </div>
               
             </nav>
@@ -1485,16 +1588,6 @@ service w
             </div>
           
 
-          
-            <div class="links-of-author motion-element">
-                
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/fx-team" target="_blank" title="GitHub">
-                      
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
-                  </span>
-                
-            </div>
           
 
           
@@ -1526,7 +1619,7 @@ service w
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">fx-team</span>
+  <span class="author" itemprop="copyrightHolder">一个富有想象力的前端团队fx-team</span>
 
   
 
