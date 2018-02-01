@@ -64,7 +64,7 @@
 
 
 
-  <meta name="keywords" content="Service Worker," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,20 +79,17 @@
 
 
 
-<meta name="description" content="前言：上周做了一个预约健身卡的项目，在领导的指引下使用了 LAVAS 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。">
-<meta name="keywords" content="Service Worker">
-<meta property="og:type" content="article">
-<meta property="og:title" content="PWA 方案相关技术分享">
-<meta property="og:url" content="https://fx-team.github.io/2018/01/28/PWA 方案相关技术分享/index.html">
+<meta name="description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="fx-team">
+<meta property="og:url" content="https://fx-team.github.io/about/index.html">
 <meta property="og:site_name" content="fx-team">
-<meta property="og:description" content="前言：上周做了一个预约健身卡的项目，在领导的指引下使用了 LAVAS 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。">
+<meta property="og:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://fx-team.github.io/2018/01/28/PWA%20方案相关技术分享/sw.png">
-<meta property="og:updated_time" content="2018-01-31T06:01:59.278Z">
+<meta property="og:updated_time" content="2018-02-01T10:58:13.385Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PWA 方案相关技术分享">
-<meta name="twitter:description" content="前言：上周做了一个预约健身卡的项目，在领导的指引下使用了 LAVAS 框架，这个框架的主要特点就是可以直接生成一套成熟的支持 PWA 的网站。在开发过程中，发现 PWA 方案的主要核心技术在于 Service Worker，我下面将从 PWA 方案的简介、PWA 方案的相关技术等2个方向简单介绍一下我对于本次开发的收获。在介绍完这些技术后，我将在最后的篇幅里介绍一个简单 PWA 方案的详细实现。">
-<meta name="twitter:image" content="https://fx-team.github.io/2018/01/28/PWA%20方案相关技术分享/sw.png">
+<meta name="twitter:title" content="fx-team">
+<meta name="twitter:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
 
 
 
@@ -124,7 +121,7 @@
 
 
 
-  <link rel="canonical" href="https://fx-team.github.io/2018/01/28/PWA 方案相关技术分享/"/>
+  <link rel="canonical" href="https://fx-team.github.io/about/"/>
 
 
 
@@ -200,6 +197,34 @@
         </li>
       
         
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+
+            
+              关于
+            
+
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+
+            
+              标签
+            
+
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -251,9 +276,9 @@
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/28/PWA 方案相关技术分享/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="name" content="fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/fx.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -375,9 +400,9 @@
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/26/前端技术周刊-2018-01-26/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="name" content="fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/fx.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -502,9 +527,9 @@ React Native 网络层分析“在使用 React Native
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/21/websocket介绍以及配合Stomp的使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="name" content="fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/fx.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -629,9 +654,9 @@ React Native 网络层分析“在使用 React Native
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/19/前端技术周刊-2018-01-19/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="name" content="fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/fx.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -756,9 +781,9 @@ Event Loop的规范和实现Event Loop 是前端的一个比较重要、基础�
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="name" content="fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/fx.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -889,9 +914,9 @@ service w
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/12/前端技术周刊-2018.01.12/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="name" content="fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/fx.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1016,9 +1041,9 @@ service w
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/08/Phaser开发游戏总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="name" content="fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/fx.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1143,9 +1168,9 @@ service w
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/05/前端技术周刊-2018.01.05/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="name" content="fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/fx.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1270,9 +1295,9 @@ service w
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/04/新的开始/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
+      <meta itemprop="name" content="fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/fx.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1415,7 +1440,11 @@ service w
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">一个富有想象力的前端团队fx-team</p>
+              <img class="site-author-image" itemprop="image"
+                src="/images/fx.jpeg"
+                alt="fx-team" />
+            
+              <p class="site-author-name" itemprop="name">fx-team</p>
               <p class="site-description motion-element" itemprop="description">一个富有想象力的前端团队</p>
           </div>
 
@@ -1438,10 +1467,10 @@ service w
                 
                 
                 <div class="site-state-item site-state-tags">
-                  
-                    <span class="site-state-item-count">6</span>
+                  <a href="/tags/index.html">
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">标签</span>
-                  
+                  </a>
                 </div>
               
             </nav>
@@ -1456,6 +1485,16 @@ service w
             </div>
           
 
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fx-team" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
           
 
           
@@ -1487,7 +1526,7 @@ service w
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">一个富有想象力的前端团队fx-team</span>
+  <span class="author" itemprop="copyrightHolder">fx-team</span>
 
   
 
