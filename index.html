@@ -342,15 +342,10 @@
       
         
           
-          koakoa 图解
-koa 的核心文件有且只有 4 个（精简、流畅、易用）
-application.js
-context.js
-request.js
-response.js
-
-今天主要解剖一下这个货 -_-&gt; application.js继承自 Emitter 类，主要用于监听 error。
-利用require(&#39;debug&#39;)(&#39;koa:application&#3
+          koakoa 图解图中一层一层的洋葱圈，其实就是每一个中间件函数middlewarefn(ctx, next)，有的是系统中间件，有的是用户中间件，这取决于用户如何定义中间件在系统中的功能层级（都是通过 app.use()加载，koa 内部不封装任何中间件函数）。
+路线分析：外层到内层-对 request 请求进行处理，内层再到外层-对 response 请求进行处理。
+代码分析：
+1234567
           ...
           <!--noindex-->
           <div class="post-button text-center">
