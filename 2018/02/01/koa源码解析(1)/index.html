@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
+<meta name="description" content="一个富有想象力的前端团队">
 <meta property="og:type" content="website">
 <meta property="og:title" content="fx-team">
-<meta property="og:url" content="https://fx-team.github.io/about/index.html">
+<meta property="og:url" content="https://fx-team.github.io/tags/index.html">
 <meta property="og:site_name" content="fx-team">
-<meta property="og:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
+<meta property="og:description" content="一个富有想象力的前端团队">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-01T10:58:13.385Z">
+<meta property="og:updated_time" content="2018-02-02T02:18:36.088Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fx-team">
-<meta name="twitter:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
+<meta name="twitter:description" content="一个富有想象力的前端团队">
 
 
 
@@ -121,7 +121,7 @@
 
 
 
-  <link rel="canonical" href="https://fx-team.github.io/about/"/>
+  <link rel="canonical" href="https://fx-team.github.io/tags/"/>
 
 
 
@@ -337,18 +337,24 @@
       
 
       
-        <h1 id="koa"><a href="#koa" class="headerlink" title="koa"></a>koa</h1><h2 id="koa-图解"><a href="#koa-图解" class="headerlink" title="koa 图解"></a>koa 图解</h2><p>图中一层一层的洋葱圈，其实就是每一个中间件函数<code>middlewarefn(ctx, next)</code>，有的是系统中间件，有的是用户中间件，这取决于用户如何定义中间件在系统中的功能层级（都是通过 app.use()加载，koa 内部不封装任何中间件函数）。</p>
+        <h1 id="koa"><a href="#koa" class="headerlink" title="koa"></a>koa</h1><p>koa 是由 Express 原班人马打造的，致力于成为一个更小、更富有表现力、更健壮的 Web 框架。 使用 koa 编写 web 应用，通过组合不同的 generator，可以免除重复繁琐的回调函数嵌套， 并极大地提升错误处理的效率。koa 不在内核方法中绑定任何中间件， 它仅仅提供了一个轻量优雅的函数库，使得编写 Web 应用变得得心应手。</p>
+<p>安装、版本依赖请<a href="https://koa.bootcss.com/" target="_blank" rel="noopener">点我点我</a> ~ O(∩_∩)O 哈哈~</p>
+<p>开篇怎能没有 hello world 呢？→_→</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>);</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa();</span><br><span class="line"></span><br><span class="line">app.use(<span class="keyword">async</span> ctx =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="string">'Hello World'</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不满意 换个口味吧？</span></span><br><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>);</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa();</span><br><span class="line"></span><br><span class="line">app.use(<span class="keyword">async</span> ctx =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="string">'Hello World'</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">http.createServer(app.callback()).listen(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="koa-图解"><a href="#koa-图解" class="headerlink" title="koa 图解"></a>koa 图解</h2><p>图中一层一层的洋葱圈，其实就是每一个中间件函数<code>middlewarefn(ctx, next)</code>，有的是系统中间件，有的是用户中间件，这取决于用户如何定义中间件在系统中的功能层级（都是通过 app.use()加载，koa 内部不封装任何中间件函数）。</p>
 <p>路线分析：外层到内层-对 request 请求进行处理，内层再到外层-对 response 请求进行处理。</p>
 <p>代码分析：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 某一个中间件函数</span></span><br><span class="line"><span class="keyword">async</span> middlewarefn (ctx, next) &#123;</span><br><span class="line">  <span class="comment">// 外层到内层的代码</span></span><br><span class="line">  ......</span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">  <span class="comment">// 内层到外层的代码</span></span><br><span class="line">  ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <img src="/2018/02/01/koa源码解析(1)/koaStructure.png" title="koa 结构">
-<h2 id="koa-的核心文件有且只有-4-个（精简、流畅、易用）"><a href="#koa-的核心文件有且只有-4-个（精简、流畅、易用）" class="headerlink" title="koa 的核心文件有且只有 4 个（精简、流畅、易用）"></a>koa 的核心文件有且只有 4 个（精简、流畅、易用）</h2><ul>
+<h2 id="koa-核心文件"><a href="#koa-核心文件" class="headerlink" title="koa 核心文件"></a>koa 核心文件</h2><p>有且仅有 4 个（精简、流畅、易用）</p>
+<ul>
 <li>application.js</li>
 <li>context.js</li>
 <li>request.js</li>
 <li>response.js</li>
 </ul>
-<h3 id="今天主要解剖一下这个货-gt-application-js"><a href="#今天主要解剖一下这个货-gt-application-js" class="headerlink" title="今天主要解剖一下这个货 -_-&gt; application.js"></a>今天主要解剖一下这个货 -_-&gt; application.js</h3><p>继承自 Emitter 类，主要用于监听 error。</p>
+<h3 id="application-js"><a href="#application-js" class="headerlink" title="application.js"></a>application.js</h3><p>今天主要解剖一下这个货 ^_^</p>
+<p>继承自 Emitter 类，主要用于监听 error。</p>
 <p>利用<code>require(&#39;debug&#39;)(&#39;koa:application&#39;)</code>模块，把所有的 debug 都输出在 koa:application 域下，便于查看。</p>
 <p>构造函数的参数简单易懂：</p>
 <ul>
@@ -539,7 +545,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -552,7 +558,7 @@
                 
                 <div class="site-state-item site-state-tags">
                   <a href="/tags/index.html">
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -602,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#koa"><span class="nav-number">1.</span> <span class="nav-text">koa</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#koa-图解"><span class="nav-number">1.1.</span> <span class="nav-text">koa 图解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#koa-的核心文件有且只有-4-个（精简、流畅、易用）"><span class="nav-number">1.2.</span> <span class="nav-text">koa 的核心文件有且只有 4 个（精简、流畅、易用）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#今天主要解剖一下这个货-gt-application-js"><span class="nav-number">1.2.1.</span> <span class="nav-text">今天主要解剖一下这个货 -_-&gt; application.js</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#listen"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">listen()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#use"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">use()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#toJSON"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">toJSON()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#inspect"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">inspect()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#callback"><span class="nav-number">1.2.1.5.</span> <span class="nav-text">callback()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#createContext"><span class="nav-number">1.2.1.6.</span> <span class="nav-text">createContext()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#respond"><span class="nav-number">1.2.1.7.</span> <span class="nav-text">respond()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#onerror"><span class="nav-number">1.2.1.8.</span> <span class="nav-text">onerror()</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#koa"><span class="nav-number">1.</span> <span class="nav-text">koa</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#koa-图解"><span class="nav-number">1.1.</span> <span class="nav-text">koa 图解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#koa-核心文件"><span class="nav-number">1.2.</span> <span class="nav-text">koa 核心文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#application-js"><span class="nav-number">1.2.1.</span> <span class="nav-text">application.js</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#listen"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">listen()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#use"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">use()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#toJSON"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">toJSON()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#inspect"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">inspect()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#callback"><span class="nav-number">1.2.1.5.</span> <span class="nav-text">callback()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#createContext"><span class="nav-number">1.2.1.6.</span> <span class="nav-text">createContext()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#respond"><span class="nav-number">1.2.1.7.</span> <span class="nav-text">respond()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#onerror"><span class="nav-number">1.2.1.8.</span> <span class="nav-text">onerror()</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
