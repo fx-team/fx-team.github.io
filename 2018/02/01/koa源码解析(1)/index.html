@@ -64,7 +64,7 @@
 
 
 
-  <meta name="keywords" content="application.js," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="koakoa 图解 koa 的核心文件有且只有 4 个（精简、流畅、易用） application.js context.js request.js response.js  今天主要解剖一下这个货 -_-&amp;gt; application.js继承自 Emitter 类，主要用于监听 error。 利用require(&amp;#39;debug&amp;#39;)(&amp;#39;koa:application&amp;#3">
-<meta name="keywords" content="application.js">
-<meta property="og:type" content="article">
-<meta property="og:title" content="koa源码解析(1)">
-<meta property="og:url" content="https://fx-team.github.io/2018/02/01/koa源码解析(1)/index.html">
+<meta name="description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="fx-team">
+<meta property="og:url" content="https://fx-team.github.io/about/index.html">
 <meta property="og:site_name" content="fx-team">
-<meta property="og:description" content="koakoa 图解 koa 的核心文件有且只有 4 个（精简、流畅、易用） application.js context.js request.js response.js  今天主要解剖一下这个货 -_-&amp;gt; application.js继承自 Emitter 类，主要用于监听 error。 利用require(&amp;#39;debug&amp;#39;)(&amp;#39;koa:application&amp;#3">
+<meta property="og:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-02T02:20:04.948Z">
+<meta property="og:updated_time" content="2018-02-02T02:18:36.085Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="koa源码解析(1)">
-<meta name="twitter:description" content="koakoa 图解 koa 的核心文件有且只有 4 个（精简、流畅、易用） application.js context.js request.js response.js  今天主要解剖一下这个货 -_-&amp;gt; application.js继承自 Emitter 类，主要用于监听 error。 利用require(&amp;#39;debug&amp;#39;)(&amp;#39;koa:application&amp;#3">
+<meta name="twitter:title" content="fx-team">
+<meta name="twitter:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
 
 
 
@@ -122,7 +121,7 @@
 
 
 
-  <link rel="canonical" href="https://fx-team.github.io/2018/02/01/koa源码解析(1)/"/>
+  <link rel="canonical" href="https://fx-team.github.io/about/"/>
 
 
 
@@ -338,7 +337,7 @@
       
 
       
-        <h1 id="koa"><a href="#koa" class="headerlink" title="koa"></a>koa</h1><h2 id="koa-图解"><a href="#koa-图解" class="headerlink" title="koa 图解"></a>koa 图解</h2>
+        <h1 id="koa"><a href="#koa" class="headerlink" title="koa"></a>koa</h1><h2 id="koa-图解"><a href="#koa-图解" class="headerlink" title="koa 图解"></a>koa 图解</h2><img src="/2018/02/01/koa源码解析(1)/koa结构.png" title="koa 结构">
 <h2 id="koa-的核心文件有且只有-4-个（精简、流畅、易用）"><a href="#koa-的核心文件有且只有-4-个（精简、流畅、易用）" class="headerlink" title="koa 的核心文件有且只有 4 个（精简、流畅、易用）"></a>koa 的核心文件有且只有 4 个（精简、流畅、易用）</h2><ul>
 <li>application.js</li>
 <li>context.js</li>
