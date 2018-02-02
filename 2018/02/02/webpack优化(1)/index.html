@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
+<meta name="description" content="一个富有想象力的前端团队">
 <meta property="og:type" content="website">
 <meta property="og:title" content="fx-team">
-<meta property="og:url" content="https://fx-team.github.io/about/index.html">
+<meta property="og:url" content="https://fx-team.github.io/tags/index.html">
 <meta property="og:site_name" content="fx-team">
-<meta property="og:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
+<meta property="og:description" content="一个富有想象力的前端团队">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-02T08:58:37.037Z">
+<meta property="og:updated_time" content="2018-02-02T02:18:36.088Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fx-team">
-<meta name="twitter:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
+<meta name="twitter:description" content="一个富有想象力的前端团队">
 
 
 
@@ -121,7 +121,7 @@
 
 
 
-  <link rel="canonical" href="https://fx-team.github.io/about/"/>
+  <link rel="canonical" href="https://fx-team.github.io/tags/"/>
 
 
 
@@ -350,10 +350,11 @@
 <p>涛哥建议我参考公司内部的配置工具，在生产环境中，针对特定的引入参数，对引入文件进行剔除。</p>
 <p>迫不及待了，上代码啊啊啊啊啊啊啊~</p>
 <p>代码简简单单，<code>source</code>入参代表文件内容，<code>resourceQuery</code>是<code>import &#39;filepath?default&#39;</code>中<code>?</code>后边的部分（包括<code>?</code>）。</p>
-<p>我这里的判断逻辑是，带有<code>?debug</code>字样的引入文件，只有在非生产环境中的mock环境才被引入（有点拗口）。</p>
+<p>我这里的判断逻辑是，带有<code>?debug</code>字样的引入文件，只有在非生产环境中的 mock 环境才被引入（有点拗口）。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> _this = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">const</span> &#123; resourceQuery &#125; = _this;</span><br><span class="line">  <span class="keyword">if</span> (resourceQuery === <span class="string">'?debug'</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; NODE_ENV, mock &#125; = process.env;</span><br><span class="line">    <span class="keyword">return</span> NODE_ENV !== <span class="string">'production'</span> &amp;&amp; !!mock ? source : <span class="string">''</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> source;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>重点在于，loaders 字段中的值<code>[&#39;happypack/loader?id=jsx&#39;]</code>，其中，通过<code>id=jsx</code>进行 happypack 插件中的加载器替换。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">        loaders: [<span class="string">'happypack/loader?id=jsx'</span>],</span><br><span class="line">        include: [</span><br><span class="line">          resolve(<span class="string">'src'</span>),</span><br><span class="line">          resolve(<span class="string">'test'</span>),</span><br><span class="line">          resolve(<span class="string">'node_modules/webpack-dev-server/client'</span>)</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>敬请期待下一节 webpack 优化(2) Dllplugin ^_^</p>
 
       
     </div>
