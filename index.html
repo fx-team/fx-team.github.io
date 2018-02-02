@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="fx-team">
 <meta property="og:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-02T02:18:36.085Z">
+<meta property="og:updated_time" content="2018-02-01T10:58:13.385Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fx-team">
 <meta name="twitter:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
@@ -273,6 +273,134 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/02/02/前端技术周刊-2018-02-02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fx-team">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/fx.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fx-team">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/02/前端技术周刊-2018-02-02/" itemprop="url">前端技术周刊 - 2018/02/02</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-02T15:09:55+08:00">2018-02-02</time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          CSS工程化演进CSS 是 Web 开发中不可或缺的一部分，在前端工程化的不断进步的今天，一方面在 CSS 特性随着规范的升级越来越丰富，另一方面，前端业务复杂性的增加带来的工程愈加庞大，驱使者开发者不断寻找CSS工程化的最佳实践。
+Chrome v65 将支持 CSS Paint APIChrome v65 中将会支持 CSS Paint API。
+境外业务性能优化实践这篇文章结合境外业务特点，
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/02/02/前端技术周刊-2018-02-02/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/02/01/koa源码解析(1)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -342,10 +470,15 @@
       
         
           
-          koakoa 图解图中一层一层的洋葱圈，其实就是每一个中间件函数middlewarefn(ctx, next)，有的是系统中间件，有的是用户中间件，这取决于用户如何定义中间件在系统中的功能层级（都是通过 app.use()加载，koa 内部不封装任何中间件函数）。
-路线分析：外层到内层-对 request 请求进行处理，内层再到外层-对 response 请求进行处理。
-代码分析：
-1234567
+          koakoa 图解
+koa 的核心文件有且只有 4 个（精简、流畅、易用）
+application.js
+context.js
+request.js
+response.js
+
+今天主要解剖一下这个货 -_-&gt; application.js继承自 Emitter 类，主要用于监听 error。
+利用require(&#39;debug&#39;)(&#39;koa:application&#3
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1406,137 +1539,13 @@ service w
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/04/新的开始/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="fx-team">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fx-team">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/04/新的开始/" itemprop="url">新的开始</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-04T14:30:53+08:00">2018-01-04</time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          这是fx-team团队2018年的第一篇博客，新的一年朝着自己的目标前进。本博客用于记录fx-team日常学习、工作反思、开源作品等各个方面。
-2018年乘风破浪，我们的征途是星辰大海。
-
-          
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/04/新的开始/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1584,7 +1593,7 @@ service w
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

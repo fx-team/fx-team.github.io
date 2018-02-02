@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="fx-team">
 <meta property="og:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-02T02:18:36.085Z">
+<meta property="og:updated_time" content="2018-02-01T10:58:13.385Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fx-team">
 <meta name="twitter:description" content="fx-team, 一个富有想象力的前端团队。 团队面向多终端技术体系，致力于页面开发、NodeJS 开发、原生 App 开发、构建工具、html5 小游戏开发等，该博客用于记录团队日常开发业务知识沉淀、技术&amp;amp;经验分享、探索发现等。">
@@ -337,11 +337,7 @@
       
 
       
-        <h1 id="koa"><a href="#koa" class="headerlink" title="koa"></a>koa</h1><h2 id="koa-图解"><a href="#koa-图解" class="headerlink" title="koa 图解"></a>koa 图解</h2><p>图中一层一层的洋葱圈，其实就是每一个中间件函数<code>middlewarefn(ctx, next)</code>，有的是系统中间件，有的是用户中间件，这取决于用户如何定义中间件在系统中的功能层级（都是通过 app.use()加载，koa 内部不封装任何中间件函数）。</p>
-<p>路线分析：外层到内层-对 request 请求进行处理，内层再到外层-对 response 请求进行处理。</p>
-<p>代码分析：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 某一个中间件函数</span></span><br><span class="line"><span class="keyword">async</span> middlewarefn (ctx, next) &#123;</span><br><span class="line">  <span class="comment">// 外层到内层的代码</span></span><br><span class="line">  ......</span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">  <span class="comment">// 内层到外层的代码</span></span><br><span class="line">  ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<img src="/2018/02/01/koa源码解析(1)/koaStructure.png" title="koa 结构">
+        <h1 id="koa"><a href="#koa" class="headerlink" title="koa"></a>koa</h1><h2 id="koa-图解"><a href="#koa-图解" class="headerlink" title="koa 图解"></a>koa 图解</h2><img src="/2018/02/01/koa源码解析(1)/koaStructure.png" title="koa 结构">
 <h2 id="koa-的核心文件有且只有-4-个（精简、流畅、易用）"><a href="#koa-的核心文件有且只有-4-个（精简、流畅、易用）" class="headerlink" title="koa 的核心文件有且只有 4 个（精简、流畅、易用）"></a>koa 的核心文件有且只有 4 个（精简、流畅、易用）</h2><ul>
 <li>application.js</li>
 <li>context.js</li>
@@ -438,6 +434,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/02/02/前端技术周刊-2018-02-02/" rel="prev" title="前端技术周刊 - 2018/02/02">
+                前端技术周刊 - 2018/02/02 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -517,7 +517,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
