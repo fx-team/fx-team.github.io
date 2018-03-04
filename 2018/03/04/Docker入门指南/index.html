@@ -100,21 +100,21 @@
 
 
   
-  <meta name="keywords" content="技术周刊," />
+  <meta name="keywords" content="Docker," />
 
 
-<meta name="description" content="腾讯社交网络图片带宽优化技术演进之路为进一步降低运营带宽成本，减小用户访问流量及提升页面加载速度，社交网络 CDN运维紧跟行业图片优化趋势，创新引入WebP、SharpP、自适应分辨率、Guetzli等图像压缩技术到现网，经过三年多的多部门联合攻关，已逐渐形成一套覆盖全图片类型（JPEG、JPG、PNG、WebP、GIF）多场景的图片压缩运营体系，适用于各类型终端，每年节约外网带宽几百G。 聊聊我">
-<meta name="keywords" content="技术周刊">
+<meta name="description" content="什么是 DockerDocker 是一种轻量级的虚拟化技术，它源自 dotCloud 公司的内部项目。Docker 是一个开源项目，其在 GitHub 上的仓库已有四万多的 star。 为什么要用 Docker传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比">
+<meta name="keywords" content="Docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前端技术周刊 - 2018&#x2F;02&#x2F;09">
-<meta property="og:url" content="https://fx-team.github.io/2018/02/09/前端技术周刊-2018-02-09/index.html">
+<meta property="og:title" content="Docker入门指南">
+<meta property="og:url" content="https://fx-team.github.io/2018/03/04/Docker入门指南/index.html">
 <meta property="og:site_name" content="fx-team">
-<meta property="og:description" content="腾讯社交网络图片带宽优化技术演进之路为进一步降低运营带宽成本，减小用户访问流量及提升页面加载速度，社交网络 CDN运维紧跟行业图片优化趋势，创新引入WebP、SharpP、自适应分辨率、Guetzli等图像压缩技术到现网，经过三年多的多部门联合攻关，已逐渐形成一套覆盖全图片类型（JPEG、JPG、PNG、WebP、GIF）多场景的图片压缩运营体系，适用于各类型终端，每年节约外网带宽几百G。 聊聊我">
+<meta property="og:description" content="什么是 DockerDocker 是一种轻量级的虚拟化技术，它源自 dotCloud 公司的内部项目。Docker 是一个开源项目，其在 GitHub 上的仓库已有四万多的 star。 为什么要用 Docker传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-04T13:59:36.334Z">
+<meta property="og:updated_time" content="2018-03-04T15:19:05.619Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="前端技术周刊 - 2018&#x2F;02&#x2F;09">
-<meta name="twitter:description" content="腾讯社交网络图片带宽优化技术演进之路为进一步降低运营带宽成本，减小用户访问流量及提升页面加载速度，社交网络 CDN运维紧跟行业图片优化趋势，创新引入WebP、SharpP、自适应分辨率、Guetzli等图像压缩技术到现网，经过三年多的多部门联合攻关，已逐渐形成一套覆盖全图片类型（JPEG、JPG、PNG、WebP、GIF）多场景的图片压缩运营体系，适用于各类型终端，每年节约外网带宽几百G。 聊聊我">
+<meta name="twitter:title" content="Docker入门指南">
+<meta name="twitter:description" content="什么是 DockerDocker 是一种轻量级的虚拟化技术，它源自 dotCloud 公司的内部项目。Docker 是一个开源项目，其在 GitHub 上的仓库已有四万多的 star。 为什么要用 Docker传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比">
 
 
 
@@ -123,7 +123,7 @@
 
 
 
-  <link rel="canonical" href="https://fx-team.github.io/2018/02/09/前端技术周刊-2018-02-09/"/>
+  <link rel="canonical" href="https://fx-team.github.io/2018/03/04/Docker入门指南/"/>
 
 
 
@@ -132,7 +132,7 @@
     sidebar: "",
   };
 </script>
-  <title>前端技术周刊 - 2018/02/09 | fx-team</title>
+  <title>Docker入门指南 | fx-team</title>
   
 
 
@@ -279,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/02/09/前端技术周刊-2018-02-09/">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/03/04/Docker入门指南/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="fx-team">
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">前端技术周刊 - 2018/02/09</h1>
+          <h1 class="post-title" itemprop="name headline">Docker入门指南</h1>
         
 
         <div class="post-meta">
@@ -308,7 +308,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T11:21:17+08:00">2018-02-09</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-04T22:10:42+08:00">2018-03-04</time>
             
 
             
@@ -345,10 +345,53 @@
       
 
       
-        <p><a href="https://mp.weixin.qq.com/s?__biz=MTEwNTM0ODI0MQ==&amp;mid=2653435164&amp;idx=1&amp;sn=70f563a0717b6377d19644264111e6f1" target="_blank" rel="noopener">腾讯社交网络图片带宽优化技术演进之路</a><br><em>为进一步降低运营带宽成本，减小用户访问流量及提升页面加载速度，社交网络 CDN运维紧跟行业图片优化趋势，创新引入WebP、SharpP、自适应分辨率、Guetzli等图像压缩技术到现网，经过三年多的多部门联合攻关，已逐渐形成一套覆盖全图片类型（JPEG、JPG、PNG、WebP、GIF）多场景的图片压缩运营体系，适用于各类型终端，每年节约外网带宽几百G。</em></p>
-<p><a href="https://github.com/berwin/Blog/issues/20" target="_blank" rel="noopener">聊聊我对现代前端框架的认知</a><br><em>客观的分析了常见的前端框架，对于前端框架不要一味追新，更要看到它的本质，透过现象看本质才不至于被表面所迷惑。</em></p>
-<p><a href="http://blog.poetries.top/2018/02/02/vsc-config/" target="_blank" rel="noopener">VS Code常用插件</a><br><em>整理了一些 VS Code 常用插件。</em></p>
-<p><a href="http://www.aliued.com/?p=4162" target="_blank" rel="noopener">别再让你的web页面在用户浏览器端裸奔</a><br><em>如果笼统的将web开发分为前端和后端开发，那后端则数据的生产，而前端则负责数据的展现。后端代码跑在我们业务方自己的服务器上，对于代码运行过程中产生的日志，具备天然的低成本获取优势，在最原始的状态下，我们可以直接登录我们的应用服务器去捞取日志，定位线上问题。不过，事实上我们会更加依赖我们已经基于日志打造的一系列成熟的后端监控系统，来监控后端应用代码运行过程中的健壮度。</em></p>
+        <h2 id="什么是-Docker"><a href="#什么是-Docker" class="headerlink" title="什么是 Docker"></a>什么是 Docker</h2><p>Docker 是一种轻量级的虚拟化技术，它源自 dotCloud 公司的内部项目。Docker 是一个开源项目，其在 GitHub 上的<a href="https://github.com/moby/moby" target="_blank" rel="noopener">仓库</a>已有四万多的 star。</p>
+<h2 id="为什么要用-Docker"><a href="#为什么要用-Docker" class="headerlink" title="为什么要用 Docker"></a>为什么要用 Docker</h2><p>传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">容器</th>
+<th style="text-align:left">虚拟机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">启动</td>
+<td style="text-align:left">秒级</td>
+<td style="text-align:left">分钟级</td>
+</tr>
+<tr>
+<td style="text-align:left">硬盘使用</td>
+<td style="text-align:left">一般为 <code>MB</code></td>
+<td style="text-align:left">一般为 <code>GB</code></td>
+</tr>
+<tr>
+<td style="text-align:left">性能</td>
+<td style="text-align:left">接近原生</td>
+<td style="text-align:left">弱于</td>
+</tr>
+<tr>
+<td style="text-align:left">系统支持量</td>
+<td style="text-align:left">单机支持上千个容器</td>
+<td style="text-align:left">一般几十个</td>
+</tr>
+</tbody>
+</table>
+<h2 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h2><p>Docker 支持的 Windows 系统的最低版本是 Windows 10 Pro，且必须开启 Hyper-V，支持的 macOS 的最低版本是 macOS 10.10.3 Yosemite。不满足以上系统要求的可以使用 <a href="https://docs.docker.com/toolbox/toolbox_install_windows/" target="_blank" rel="noopener">Docker Toolbox</a>。</p>
+<h2 id="Docker的基本概念"><a href="#Docker的基本概念" class="headerlink" title="Docker的基本概念"></a>Docker的基本概念</h2><h3 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h3><p>Docker 镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。</p>
+<p>利用 Union FS 的技术，分层存储的架构。镜像构建时，会一层层构建，前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。</p>
+<p>目前在 <a href="https://hub.docker.com/" target="_blank" rel="noopener">Docker Hub</a> 上有大量的开源镜像，可以通过 <code>docker pull</code> 命令将这些镜像拉取到本地。</p>
+<h3 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h3><p>镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。每一个容器运行时，是以镜像为基础层，在其上创建一个当前容器的存储层，我们可以称这个为容器运行时读写而准备的存储层为容器存储层。容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡。因此，任何保存于容器存储层的信息都会随容器删除而丢失。可以通过 <code>docker run</code> 命令来启动一个容器。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>从官方仓库拉取 nodejs 的镜像，使用 <code>Dockerfile</code> 构建一个新镜像，基于此镜像新建一个容器并启动，此容器监听本机的3000端口，访问 <code>localhost:3000</code>，页面返回 <code>hello world</code>。</p>
+<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><p>在命令行输入 <code>docker pull node:8</code>，即可从官方仓库拉取到 nodejs 8.x 版本的镜像。</p>
+<h3 id="构建新镜像"><a href="#构建新镜像" class="headerlink" title="构建新镜像"></a>构建新镜像</h3><p>在一个空目录中新建 <code>test.js</code> 文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> res.end(<span class="string">'hello world'</span>)).listen(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
+<p>在该目录中新建 <code>Dockerfile</code> 文件。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> node:<span class="number">8</span></span><br><span class="line"><span class="keyword">COPY</span> . /app</span><br><span class="line">WORKDIR /app</span><br><span class="line">EXPOSE 3000</span><br><span class="line">CMD ["node", "test.js"]</span><br></pre></td></tr></table></figure>
+<p>在该目录中执行 <code>docker build -t node:v1 .</code>，即可在本地构建一个名为 <code>node:v1</code> 的新镜像。</p>
+<h3 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h3><p>执行 <code>docker run --name nv -d -p 3000:3000 node:v1</code> 即可以 <code>node:v1</code> 为基础新建一个名为 <code>nv</code> 的容器并启动。</p>
+<p>此时在浏览器地址栏中输入 <code>localhost:3000</code> 即可看到页面返回了 <code>hello world</code>。</p>
 
       
     </div>
@@ -367,7 +410,7 @@
     <strong>本文作者：</strong>fx-team</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://fx-team.github.io/2018/02/09/前端技术周刊-2018-02-09/" title="前端技术周刊 - 2018/02/09">https://fx-team.github.io/2018/02/09/前端技术周刊-2018-02-09/</a>
+    <a href="https://fx-team.github.io/2018/03/04/Docker入门指南/" title="Docker入门指南">https://fx-team.github.io/2018/03/04/Docker入门指南/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li>
@@ -380,7 +423,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/技术周刊/" rel="tag"># 技术周刊</a>
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
           
         </div>
       
@@ -393,8 +436,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/02/webpack优化(1)/" rel="next" title="webpack 优化(1)">
-                <i class="fa fa-chevron-left"></i> webpack 优化(1)
+              <a href="/2018/03/02/前端技术周刊-2018-03-02/" rel="next" title="前端技术周刊 - 2018/03/02">
+                <i class="fa fa-chevron-left"></i> 前端技术周刊 - 2018/03/02
               </a>
             
           </div>
@@ -402,10 +445,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/02/前端技术周刊-2018-03-02/" rel="prev" title="前端技术周刊 - 2018/03/02">
-                前端技术周刊 - 2018/03/02 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -454,8 +493,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -547,6 +595,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-Docker"><span class="nav-number">1.</span> <span class="nav-text">什么是 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用-Docker"><span class="nav-number">2.</span> <span class="nav-text">为什么要用 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Docker"><span class="nav-number">3.</span> <span class="nav-text">安装 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker的基本概念"><span class="nav-number">4.</span> <span class="nav-text">Docker的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#镜像"><span class="nav-number">4.1.</span> <span class="nav-text">镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#容器"><span class="nav-number">4.2.</span> <span class="nav-text">容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">5.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#拉取镜像"><span class="nav-number">5.1.</span> <span class="nav-text">拉取镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建新镜像"><span class="nav-number">5.2.</span> <span class="nav-text">构建新镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动容器"><span class="nav-number">5.3.</span> <span class="nav-text">启动容器</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
