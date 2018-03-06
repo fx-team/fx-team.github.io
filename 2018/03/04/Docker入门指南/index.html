@@ -106,14 +106,14 @@
 <meta name="description" content="什么是 DockerDocker 是一种轻量级的虚拟化技术，它源自 dotCloud 公司的内部项目。Docker 是一个开源项目，其在 GitHub 上的仓库已有四万多的 star。 为什么要用 Docker传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比">
 <meta name="keywords" content="Docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker入门指南">
+<meta property="og:title" content="Docker 入门指南">
 <meta property="og:url" content="https://fx-team.github.io/2018/03/04/Docker入门指南/index.html">
 <meta property="og:site_name" content="fx-team">
 <meta property="og:description" content="什么是 DockerDocker 是一种轻量级的虚拟化技术，它源自 dotCloud 公司的内部项目。Docker 是一个开源项目，其在 GitHub 上的仓库已有四万多的 star。 为什么要用 Docker传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-05T03:17:24.088Z">
+<meta property="og:updated_time" content="2018-03-06T09:01:32.121Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker入门指南">
+<meta name="twitter:title" content="Docker 入门指南">
 <meta name="twitter:description" content="什么是 DockerDocker 是一种轻量级的虚拟化技术，它源自 dotCloud 公司的内部项目。Docker 是一个开源项目，其在 GitHub 上的仓库已有四万多的 star。 为什么要用 Docker传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比">
 
 
@@ -132,7 +132,7 @@
     sidebar: "",
   };
 </script>
-  <title>Docker入门指南 | fx-team</title>
+  <title>Docker 入门指南 | fx-team</title>
   
 
 
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Docker入门指南</h1>
+          <h1 class="post-title" itemprop="name headline">Docker 入门指南</h1>
         
 
         <div class="post-meta">
@@ -379,7 +379,7 @@
 </tbody>
 </table>
 <h2 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h2><p>Docker 支持的 Windows 系统的最低版本是 Windows 10 Pro，且必须开启 Hyper-V，支持的 macOS 的最低版本是 macOS 10.10.3 Yosemite。不满足以上系统要求的可以使用 <a href="https://docs.docker.com/toolbox/toolbox_install_windows/" target="_blank" rel="noopener">Docker Toolbox</a>。</p>
-<h2 id="Docker的基本概念"><a href="#Docker的基本概念" class="headerlink" title="Docker的基本概念"></a>Docker的基本概念</h2><h3 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h3><p>Docker 镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。</p>
+<h2 id="Docker-的基本概念"><a href="#Docker-的基本概念" class="headerlink" title="Docker 的基本概念"></a>Docker 的基本概念</h2><h3 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h3><p>Docker 镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建之后也不会被改变。</p>
 <p>利用 Union FS 的技术，分层存储的架构。镜像构建时，会一层层构建，前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。</p>
 <p>目前在 <a href="https://hub.docker.com/" target="_blank" rel="noopener">Docker Hub</a> 上有大量的开源镜像，可以通过 <code>docker pull</code> 命令将这些镜像拉取到本地。</p>
 <h3 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h3><p>镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。每一个容器运行时，是以镜像为基础层，在其上创建一个当前容器的存储层，我们可以称这个为容器运行时读写而准备的存储层为容器存储层。容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡。因此，任何保存于容器存储层的信息都会随容器删除而丢失。可以通过 <code>docker run</code> 命令来启动一个容器。</p>
@@ -410,7 +410,7 @@
     <strong>本文作者：</strong>fx-team</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://fx-team.github.io/2018/03/04/Docker入门指南/" title="Docker入门指南">https://fx-team.github.io/2018/03/04/Docker入门指南/</a>
+    <a href="https://fx-team.github.io/2018/03/04/Docker入门指南/" title="Docker 入门指南">https://fx-team.github.io/2018/03/04/Docker入门指南/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li>
@@ -605,7 +605,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-Docker"><span class="nav-number">1.</span> <span class="nav-text">什么是 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用-Docker"><span class="nav-number">2.</span> <span class="nav-text">为什么要用 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Docker"><span class="nav-number">3.</span> <span class="nav-text">安装 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker的基本概念"><span class="nav-number">4.</span> <span class="nav-text">Docker的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#镜像"><span class="nav-number">4.1.</span> <span class="nav-text">镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#容器"><span class="nav-number">4.2.</span> <span class="nav-text">容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">5.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#拉取镜像"><span class="nav-number">5.1.</span> <span class="nav-text">拉取镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建新镜像"><span class="nav-number">5.2.</span> <span class="nav-text">构建新镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动容器"><span class="nav-number">5.3.</span> <span class="nav-text">启动容器</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-Docker"><span class="nav-number">1.</span> <span class="nav-text">什么是 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用-Docker"><span class="nav-number">2.</span> <span class="nav-text">为什么要用 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Docker"><span class="nav-number">3.</span> <span class="nav-text">安装 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-的基本概念"><span class="nav-number">4.</span> <span class="nav-text">Docker 的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#镜像"><span class="nav-number">4.1.</span> <span class="nav-text">镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#容器"><span class="nav-number">4.2.</span> <span class="nav-text">容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">5.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#拉取镜像"><span class="nav-number">5.1.</span> <span class="nav-text">拉取镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建新镜像"><span class="nav-number">5.2.</span> <span class="nav-text">构建新镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动容器"><span class="nav-number">5.3.</span> <span class="nav-text">启动容器</span></a></li></ol></li></ol></div>
             
 
           </div>
