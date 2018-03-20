@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.3" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="单元测试," />
+
+
+<meta name="description" content="博客背景：单元测试作为今年的全组通用任务，要求在所有项目中实施，每个人都需要会写单元测试。所以我在上周进行了一下单元测试的调研，这次调研的方向是主要使用 Mocha 基于 Karma 进行包括 UI 层的单元测试。  下面我主要描述一下搭建这套单元测试环境和开发的所用技术，和具体的 demo。 使用的工具介绍 使用 JavaScript 测试执行过程管理工具 KarmaKarma是一个基于 No">
+<meta name="keywords" content="单元测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单元测试初体验">
+<meta property="og:url" content="https://fx-team.github.io/2018/03/12/单元测试初体验/index.html">
+<meta property="og:site_name" content="fx-team">
+<meta property="og:description" content="博客背景：单元测试作为今年的全组通用任务，要求在所有项目中实施，每个人都需要会写单元测试。所以我在上周进行了一下单元测试的调研，这次调研的方向是主要使用 Mocha 基于 Karma 进行包括 UI 层的单元测试。  下面我主要描述一下搭建这套单元测试环境和开发的所用技术，和具体的 demo。 使用的工具介绍 使用 JavaScript 测试执行过程管理工具 KarmaKarma是一个基于 No">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-20T02:02:41.639Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="单元测试初体验">
+<meta name="twitter:description" content="博客背景：单元测试作为今年的全组通用任务，要求在所有项目中实施，每个人都需要会写单元测试。所以我在上周进行了一下单元测试的调研，这次调研的方向是主要使用 Mocha 基于 Karma 进行包括 UI 层的单元测试。  下面我主要描述一下搭建这套单元测试环境和开发的所用技术，和具体的 demo。 使用的工具介绍 使用 JavaScript 测试执行过程管理工具 KarmaKarma是一个基于 No">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="fx-team" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="https://fx-team.github.io/2018/03/12/单元测试初体验/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>单元测试初体验 | fx-team</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">fx-team</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/03/12/单元测试初体验/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fx-team">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/fx.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fx-team">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">单元测试初体验</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-12T14:27:20+08:00">2018-03-12</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>博客背景：单元测试作为今年的全组通用任务，要求在所有项目中实施，每个人都需要会写单元测试。所以我在上周进行了一下单元测试的调研，这次调研的方向是主要使用 Mocha 基于 Karma 进行包括 UI 层的单元测试。</p>
+</blockquote>
+<p>下面我主要描述一下搭建这套单元测试环境和开发的所用技术，和具体的 demo。</p>
+<h2 id="使用的工具介绍"><a href="#使用的工具介绍" class="headerlink" title="使用的工具介绍"></a>使用的工具介绍</h2><ol>
+<li><p>使用 JavaScript 测试执行过程管理工具 Karma<br>Karma是一个基于 Node.js 的 JavaScript 测试执行过程管理工具（Test Runner）。该工具可用于测试所有主流Web浏览器。这个测试工具的一个强大特性就是，它可以监控(Watch)文件的变化，然后自行执行，通过 console.log 显示测试结果。</p>
+</li>
+<li><p>单元测试框架 Mocha<br>Mocha 是 JavaScript 的一种单元测试框架，既可以在浏览器环境下运行，也可以在 Node.js 环境下运行。</p>
+</li>
+<li><p>断言库 Chai<br>Chai 是一个针对 Node.js 和浏览器的行为驱动测试和测试驱动测试的断言库，可与任何 JavaScript 测试框架集成。</p>
+</li>
+<li><p>测试辅助工具 Sinon<br>Sinon 是一个独立的 JavaScript 测试 spy, stub, mock库，没有依赖任何单元测试框架工程。</p>
+</li>
+</ol>
+<h2 id="Karma-的部分-API"><a href="#Karma-的部分-API" class="headerlink" title="Karma 的部分 API"></a>Karma 的部分 API</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// karma.conf.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">config</span>) </span>&#123;</span><br><span class="line">  config.set(&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: String。默认为""。将用于解析files和exclude中定义的所有相对路径的根路径位置。如果basePath的配置是一个相对路径，那么它将被解析到__dirname的配置文件中。</span></span><br><span class="line">    basePath: <span class="string">''</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: Array。默认为[]。你要使用的测试框架列表。通常情况下，你会设置该值为['jasmine'], ['mocha'] 或 ['qunit']…</span></span><br><span class="line">    <span class="comment">// available frameworks: https://npmjs.org/browse/keyword/karma-adapter</span></span><br><span class="line">    <span class="comment">// frameworks: ['mocha', 'sinon-chai', 'phantomjs-shim'],</span></span><br><span class="line">    frameworks: [<span class="string">'mocha'</span>, <span class="string">'sinon-chai'</span>, <span class="string">'source-map-support'</span>],</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: Array。默认为[]。在浏览器中加载的文件/模式列表。</span></span><br><span class="line">    files: [</span><br><span class="line">      <span class="comment">// &#123;pattern: 'test/**/*.js', included: false&#125;</span></span><br><span class="line">      <span class="string">'src/**/*.test.js'</span></span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: Array。默认为[]。从加载文件中排除的文件/模式的列表</span></span><br><span class="line">    exclude: [</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: Object。默认为&#123;'**/*.coffee': 'coffee'&#125;。要是用的预处理器的映射。预处理器可以通过插件加载。</span></span><br><span class="line">    <span class="comment">// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor</span></span><br><span class="line">    preprocessors: &#123;</span><br><span class="line">      <span class="string">'src/**/*.test.js'</span>: [<span class="string">'webpack'</span>, <span class="string">'sourcemap'</span>]</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: Array。默认为 ['progress']。 </span></span><br><span class="line">    <span class="comment">// 可能的值：</span></span><br><span class="line">    <span class="comment">//  · dots</span></span><br><span class="line">    <span class="comment">//  · progress。</span></span><br><span class="line">    <span class="comment">// 使用的报告者（reporter）列表。</span></span><br><span class="line">    <span class="comment">// available reporters: https://npmjs.org/browse/keyword/karma-reporter</span></span><br><span class="line">    reporters: [<span class="string">'spec'</span>, <span class="string">'coverage'</span>],</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: Number。默认值为9876。设置将被web服务器监听的端口。</span></span><br><span class="line">    port: <span class="number">9876</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: Boolean。默认为true。启用或禁用输出（报告和日志）的颜色</span></span><br><span class="line">    colors: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: Constant。默认为config.LOG_INFO。</span></span><br><span class="line">    <span class="comment">// possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG</span></span><br><span class="line">    logLevel: config.LOG_ERROR,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type：Boolean。默认为true。启用或禁用监视文件，当这些文件被改变时，执行测试。</span></span><br><span class="line">    autoWatch: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 该值是要启动和捕获的浏览器列表。当Karma启动时，它也会启动放置在这个设置中的每个浏览器。一旦Karma关闭，它也会关闭这些浏览器。您可以通过打开浏览器并访问Karma Web服务器正在侦听的URL来手动捕获任何浏览器（默认情况下为http://localhost:9876/）。</span></span><br><span class="line">    <span class="comment">// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher</span></span><br><span class="line">    <span class="comment">// browsers: ['PhantomJS'],</span></span><br><span class="line">    browsers: [<span class="string">'Chrome'</span>],</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: Boolean。默认为false。持续集成模式。</span></span><br><span class="line">    <span class="comment">// 如果该值为true，karma将会启动和捕获配置的浏览器，运行测试然后退出，退出使用的代码0或1取决于测试是成功还是失败。</span></span><br><span class="line">    singleRun: <span class="literal">false</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Type: Number。默认为"Infinity"。karma并行启动多少个浏览器。使用该配置，你可以指定在同一时间点上，一次运行多少个浏览器。</span></span><br><span class="line">    concurrency: <span class="literal">Infinity</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// coverage 配置项</span></span><br><span class="line">    coverageReporter: &#123;</span><br><span class="line">      reporters:[</span><br><span class="line">        &#123;<span class="attr">type</span>: <span class="string">'html'</span>, <span class="attr">dir</span>: <span class="string">'coverage/'</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">type</span>: <span class="string">'text-summary'</span>&#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Mocha-的部分-API"><a href="#Mocha-的部分-API" class="headerlink" title="Mocha 的部分 API"></a>Mocha 的部分 API</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">'标题'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  it(<span class="string">'断言内容'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 断言部分</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="Chai-的部分-API"><a href="#Chai-的部分-API" class="headerlink" title="Chai 的部分 API"></a>Chai 的部分 API</h2><p>Chai 支持 BDD 风格的 expect/should API 和 TDD 风格的 Assert API。</p>
+<p>expect 和 should是 BDD 风格的，二者使用相同的链式语言来组织断言，但不同在于他们初始化断言的方式：expect 使用构造函数来创建断言对象实例，而 should 通过为 Object.prototype 新增方法来实现断言（所以 should 不支持 IE）；expect 直接指向chai.expect，而 should 则是 chai.should()。</p>
+<h3 id="语言链"><a href="#语言链" class="headerlink" title="语言链"></a>语言链</h3><p>下面的接口是单纯作为语言链提供以期提高断言的可读性。除非被插件改写否则它们一般不提供测试功能。</p>
+<blockquote>
+<p>to be been is that which and has have with at of same</p>
+</blockquote>
+<h3 id="not"><a href="#not" class="headerlink" title=".not"></a>.not</h3><p>对之后的断言取反<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">expect(foo).to.not.equal(<span class="string">'bar'</span>)</span><br><span class="line">expect(goodFn).to.not.throw(<span class="built_in">Error</span>)</span><br><span class="line">expect(&#123; <span class="attr">foo</span>: <span class="string">'baz'</span>&#125;).to.have.property(<span class="string">'foo'</span>)</span><br><span class="line">  .and.not.equal(<span class="string">'bar'</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="deep"><a href="#deep" class="headerlink" title=".deep"></a>.deep</h3><p>设置 deep 标记，然后使用 equal 和 property 断言。该标记可以让其后的断言不是比较对象本身，而是递归比较对象的键值对。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">expect(foo).to.deep.equal(&#123; <span class="attr">bar</span>: <span class="string">'baz'</span>&#125;)</span><br><span class="line">expect(&#123; <span class="attr">foo</span>: &#123; <span class="attr">bar</span>: &#123; <span class="attr">baz</span>: <span class="string">'quux'</span>&#125;&#125;&#125;)</span><br><span class="line">  .to.have.deep.property(<span class="string">'foo.bar.baz'</span>, <span class="string">'quux'</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="a-type-an-type"><a href="#a-type-an-type" class="headerlink" title=".a(type) / .an(type)"></a>.a(type) / .an(type)</h3><p>type：String，被测试的值的类型<br>a 和 an 断言即可作为语言链又可作为断言使用<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 类型断言</span></span><br><span class="line">expect(<span class="string">'test'</span>).to.be.a(<span class="string">'string'</span>);</span><br><span class="line">expect(&#123; <span class="attr">foo</span>: <span class="string">'bar'</span> &#125;).to.be.an(<span class="string">'object'</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="include-value-contains-value"><a href="#include-value-contains-value" class="headerlink" title=".include(value) / contains(value)"></a>.include(value) / contains(value)</h3><p>value：Object | String | Number</p>
+<p>include() 和 contains() 即可作为属性类断言前缀语言链又可作为作为判断数组、字符串是否包含某值的断言使用。当作为语言链使用时，常用于 key() 断言之前<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">expect([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]).to.include(<span class="number">2</span>)</span><br><span class="line">expect(<span class="string">'foobar'</span>).to.include(<span class="string">'bar'</span>)</span><br><span class="line">expect(&#123; <span class="attr">foo</span>: <span class="string">'bar'</span>, <span class="attr">hello</span>: <span class="string">'universe'</span> &#125;).to.include.keys(<span class="string">'foo'</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="ok"><a href="#ok" class="headerlink" title=".ok"></a>.ok</h3><p>断言目标为真值。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">expect(<span class="string">'everything'</span>).to.be.ok</span><br><span class="line">expect(<span class="number">1</span>).to.be.ok</span><br><span class="line">expect(<span class="literal">false</span>).to.not.be.ok</span><br><span class="line">expect(<span class="literal">null</span>).to.not.be.ok</span><br></pre></td></tr></table></figure></p>
+<h3 id="true"><a href="#true" class="headerlink" title=".true"></a>.true</h3><p>断言目标为 true。注意，这里与 ok 的区别是不进行类型转换，只能为 true 才能通过断言<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">expect(<span class="literal">true</span>).to.be.true</span><br><span class="line">expect(<span class="number">1</span>)to.not.be.true</span><br></pre></td></tr></table></figure></p>
+<h3 id="false"><a href="#false" class="headerlink" title=".false"></a>.false</h3><p>断言目标为 false<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">expect(<span class="literal">false</span>).to.be.false</span><br><span class="line">expect(<span class="number">0</span>).to.not.be.false</span><br></pre></td></tr></table></figure></p>
+<h3 id="NaN"><a href="#NaN" class="headerlink" title=".NaN"></a>.NaN</h3><p>断言目标为非数字 NaN<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">expect(<span class="string">'foo'</span>).to.be.null</span><br><span class="line">expect(<span class="number">4</span>)to.not.be.null</span><br></pre></td></tr></table></figure></p>
+<h3 id="exist"><a href="#exist" class="headerlink" title=".exist"></a>.exist</h3><p>断言目标存在，即非 null 也非 undefined<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = <span class="string">'hi'</span>,</span><br><span class="line">  bar = <span class="literal">null</span>,</span><br><span class="line">  baz</span><br><span class="line"></span><br><span class="line">expect(foo).to.exist</span><br><span class="line">expect(bar).to.not.exist</span><br><span class="line">expect(baz).to.not.exist</span><br></pre></td></tr></table></figure></p>
+<h3 id="empty"><a href="#empty" class="headerlink" title=".empty"></a>.empty</h3><p>断言目标的长度为 0。对于数组和字符串，它检查 length 属性，对于对象，它检查可枚举属性的数量<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">expect([]).to.be.empty</span><br><span class="line">expect(<span class="string">''</span>).to.be.empty</span><br><span class="line">expect(&#123;&#125;).to.be.empty</span><br></pre></td></tr></table></figure></p>
+<h2 id="Sinon-API-介绍"><a href="#Sinon-API-介绍" class="headerlink" title="Sinon API 介绍"></a>Sinon API 介绍</h2><p>辅助工具库 Sinon 主要有三个Api：spy, stub, mock</p>
+<h3 id="spy"><a href="#spy" class="headerlink" title="spy"></a>spy</h3><p>翻译过来的意思是 “监视”。</p>
+<p>sinon.js 中 spy 主要用来监视函数的调用情况，sinon 对待监视的函数进行 wrap 包装，因此可以通过它清楚的知道，该函数被调用过几次，传入什么参数返回什么结果，甚至是抛出的异常情况。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> spy = sinon.spy(orginObj, <span class="string">'launch'</span>);</span><br><span class="line">spy.restore();</span><br></pre></td></tr></table></figure></p>
+<p>当 spy 使用完成后，切记把它恢复成原始函数，就像上边例子中最后一步那样。如果不这样做，你的测试可能会出现不可预知的结果。</p>
+<h3 id="stub"><a href="#stub" class="headerlink" title="stub"></a>stub</h3><p>使用 stub 来嵌入<del>或者直接替换掉一些代码</del>，来达到隔离的目的。stub 是代码的一部分。在运行时用 stub 替换真正代码，忽略调用代码的原有实现。目的是用一个简单一点的行为替换一个复杂的行为，从而独立地测试代码的某一部分。它拥有 spy 提供的所有功能，区别在于它会完全替换掉目标函数，而不只是记录函数的调用信息。换句话说，当使用 spy 时，原函数还会继续执行，但使用 stub 时就不会。</p>
+<h3 id="Mocks"><a href="#Mocks" class="headerlink" title="Mocks"></a>Mocks</h3><p>Mocks 是使用 stub 的另一种途径。如果你曾经听过“mock 对象”这种说法，这其实是一码事 —— Sinon 的 mock 可以用来替换整个对象以改变其行为，就像函数 stub 一样。</p>
+<h2 id="单元测试-Demo"><a href="#单元测试-Demo" class="headerlink" title="单元测试 Demo"></a>单元测试 Demo</h2><p>这里的一些 Demo，结合了公司内部的代码进行了实际单元测试的书写，因为涉及公司业务代码，暂不公开。请前往公司 gitlab 查看相关 Demo。</p>
+<ol>
+<li><p>正常单元测试，git地址：<a href="https://git.ms.netease.com/changxiao/unitTest" target="_blank" rel="noopener">https://git.ms.netease.com/changxiao/unitTest</a></p>
+</li>
+<li><p>基于 Vue 开发的组件进行 UI 层测试，主要测试 Dom 的改变，事件的触发。git 地址：<a href="https://git.ms.netease.com/guessing/fe/tree/f_unit" target="_blank" rel="noopener">https://git.ms.netease.com/guessing/fe/tree/f_unit</a></p>
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://mochajs.org/" target="_blank" rel="noopener">https://mochajs.org/</a><br><a href="https://cn.vuejs.org/v2/guide/unit-testing.html" target="_blank" rel="noopener">https://cn.vuejs.org/v2/guide/unit-testing.html</a><br><a href="http://blog.csdn.net/maomaolaoshi/article/details/78542837" target="_blank" rel="noopener">http://blog.csdn.net/maomaolaoshi/article/details/78542837</a><br><a href="https://www.cnblogs.com/wyqlxy/p/7131079.html" target="_blank" rel="noopener">https://www.cnblogs.com/wyqlxy/p/7131079.html</a><br><a href="http://blog.csdn.net/hustzw07/article/details/74178051" target="_blank" rel="noopener">http://blog.csdn.net/hustzw07/article/details/74178051</a><br><a href="http://www.zcfy.cc/article/sinon-tutorial-javascript-testing-with-mocks-spies-stubs-422.html" target="_blank" rel="noopener">http://www.zcfy.cc/article/sinon-tutorial-javascript-testing-with-mocks-spies-stubs-422.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong><a href="https://github.com/changxiao" target="_blank">changxiao</a></li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://fx-team.github.io/2018/03/12/单元测试初体验/" title="单元测试初体验">https://fx-team.github.io/2018/03/12/单元测试初体验/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/单元测试/" rel="tag"># 单元测试</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/09/前端技术周刊-2018-03-09/" rel="next" title="前端技术周刊 - 2018/03/09">
+                <i class="fa fa-chevron-left"></i> 前端技术周刊 - 2018/03/09
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/16/前端技术周刊-2018-03-16/" rel="prev" title="前端技术周刊 - 2018/03/16">
+                前端技术周刊 - 2018/03/16 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/fx.jpeg"
+                alt="fx-team" />
+            
+              <p class="site-author-name" itemprop="name">fx-team</p>
+              <p class="site-description motion-element" itemprop="description">一个富有想象力的前端团队</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/fx-team" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用的工具介绍"><span class="nav-number">1.</span> <span class="nav-text">使用的工具介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Karma-的部分-API"><span class="nav-number">2.</span> <span class="nav-text">Karma 的部分 API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mocha-的部分-API"><span class="nav-number">3.</span> <span class="nav-text">Mocha 的部分 API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chai-的部分-API"><span class="nav-number">4.</span> <span class="nav-text">Chai 的部分 API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语言链"><span class="nav-number">4.1.</span> <span class="nav-text">语言链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#not"><span class="nav-number">4.2.</span> <span class="nav-text">.not</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deep"><span class="nav-number">4.3.</span> <span class="nav-text">.deep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-type-an-type"><span class="nav-number">4.4.</span> <span class="nav-text">.a(type) / .an(type)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#include-value-contains-value"><span class="nav-number">4.5.</span> <span class="nav-text">.include(value) / contains(value)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ok"><span class="nav-number">4.6.</span> <span class="nav-text">.ok</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#true"><span class="nav-number">4.7.</span> <span class="nav-text">.true</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#false"><span class="nav-number">4.8.</span> <span class="nav-text">.false</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NaN"><span class="nav-number">4.9.</span> <span class="nav-text">.NaN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exist"><span class="nav-number">4.10.</span> <span class="nav-text">.exist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#empty"><span class="nav-number">4.11.</span> <span class="nav-text">.empty</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sinon-API-介绍"><span class="nav-number">5.</span> <span class="nav-text">Sinon API 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spy"><span class="nav-number">5.1.</span> <span class="nav-text">spy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stub"><span class="nav-number">5.2.</span> <span class="nav-text">stub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mocks"><span class="nav-number">5.3.</span> <span class="nav-text">Mocks</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单元测试-Demo"><span class="nav-number">6.</span> <span class="nav-text">单元测试 Demo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fx-team</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.3"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

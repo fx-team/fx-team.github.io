@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.3" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="WebGL 游戏 优化," />
+
+
+<meta name="description" content="背景：从 PC 端游到 H5 小游戏，从一点一滴的内存到叹为观止的算法，游戏的性能一直是重点关注的话题。优秀的性能不仅能保证流畅的用户体验，也决定着复杂的动效和场景的上限。所以我做了一次 Phaser 渲染性能优化方面的分享，本文是对这次分享的记录和总结，将会从 Pixi 的渲染机制入手来进行游戏优化。在本文的最后，会通过一个游戏开发中常见的组件进行实战优化。">
+<meta name="keywords" content="WebGL 游戏 优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="游戏渲染优化">
+<meta property="og:url" content="https://fx-team.github.io/2018/03/18/游戏渲染优化/index.html">
+<meta property="og:site_name" content="fx-team">
+<meta property="og:description" content="背景：从 PC 端游到 H5 小游戏，从一点一滴的内存到叹为观止的算法，游戏的性能一直是重点关注的话题。优秀的性能不仅能保证流畅的用户体验，也决定着复杂的动效和场景的上限。所以我做了一次 Phaser 渲染性能优化方面的分享，本文是对这次分享的记录和总结，将会从 Pixi 的渲染机制入手来进行游戏优化。在本文的最后，会通过一个游戏开发中常见的组件进行实战优化。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fx-team.github.io/2018/03/18/游戏渲染优化/1.gif">
+<meta property="og:image" content="https://fx-team.github.io/2018/03/18/游戏渲染优化/2.gif">
+<meta property="og:updated_time" content="2018-03-20T02:02:41.640Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="游戏渲染优化">
+<meta name="twitter:description" content="背景：从 PC 端游到 H5 小游戏，从一点一滴的内存到叹为观止的算法，游戏的性能一直是重点关注的话题。优秀的性能不仅能保证流畅的用户体验，也决定着复杂的动效和场景的上限。所以我做了一次 Phaser 渲染性能优化方面的分享，本文是对这次分享的记录和总结，将会从 Pixi 的渲染机制入手来进行游戏优化。在本文的最后，会通过一个游戏开发中常见的组件进行实战优化。">
+<meta name="twitter:image" content="https://fx-team.github.io/2018/03/18/游戏渲染优化/1.gif">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="fx-team" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="https://fx-team.github.io/2018/03/18/游戏渲染优化/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>游戏渲染优化 | fx-team</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">fx-team</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/03/18/游戏渲染优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fx-team">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/fx.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fx-team">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">游戏渲染优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T13:02:15+08:00">2018-03-18</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>背景：从 PC 端游到 H5 小游戏，从一点一滴的内存到叹为观止的算法，游戏的性能一直是重点关注的话题。优秀的性能不仅能保证流畅的用户体验，也决定着复杂的动效和场景的上限。所以我做了一次 Phaser 渲染性能优化方面的分享，本文是对这次分享的记录和总结，将会从 Pixi 的渲染机制入手来进行游戏优化。在本文的最后，会通过一个游戏开发中常见的组件进行实战优化。<br><a id="more"></a></p>
+</blockquote>
+<h2 id="Pixi-渲染机制"><a href="#Pixi-渲染机制" class="headerlink" title="Pixi 渲染机制"></a>Pixi 渲染机制</h2><p>Phaser 内部使用的是 Pixi v2 的一个自定义版本用于渲染。为了快速得渲染多个精灵，Pixi v2 支持在 WebGL 下进行批次渲染(sprite batch)，工作流程如下：</p>
+<ol>
+<li><p>每一帧，Pixi 都会从显示列表(display list)的最顶层也就是 stage 对象开始向下遍历找寻显示对象(display object)，每找到一个显示对象，Pixi就会看看它的 BaseTexture，通过这个属性可以探查到所关联的图片，然后就会将这个 texture 绑定到 GPU，一个新的批次(batch)就开始了。</p>
+</li>
+<li><p>Pixi 上传了显示对象的顶点信息后会继续向下找寻对象，如果下一个显示对象使用的是同一个 BaseTexure 那么完事大吉，因为这样就不会去绑定一个新的 texture 了，Pixi 会将这个精灵的信息加到当前的这个批次中，然后继续找下去，直到：</p>
+</li>
+</ol>
+<ul>
+<li>Pixi 找到的某个精灵有着和批次不同的 BaseTexture。</li>
+<li>这个批次中填满了 2000 个元素。</li>
+</ul>
+<p>在这两种情况下，这个批次就会被冲刷(flush)。冲刷就是把所有的 texture 和顶点信息发送给 WebGL 并且调起一次 draw call 来绘制这些精灵。随后这一批次的数据就会被清空。</p>
+<p>在此之后，下一批次就开始了。绑定到 GPU，加到批次中，冲刷，绘制，循环往复，直到遍历完整个显示列表。</p>
+<p>这个过程是每帧都会执行的，值得一提的是这个遍历是深度优先的。</p>
+<h2 id="使用-Texture-Atlas"><a href="#使用-Texture-Atlas" class="headerlink" title="使用 Texture Atlas"></a>使用 Texture Atlas</h2><p>draw call 是最耗时的操作，想必大家都想尽力较少 draw call 次数。所以 texture atlas 显得无比重要。所有共享同一个 atlas 的不同部分小图的精灵不会导致批次被冲刷，因为他们背后的那张图片是同一张，共享一个 atlas 的精灵只会被绑定到一批中，然后一起绘制。</p>
+<p>当然，这是有 GPU 限制的。A9 GPU 的 iPhone 6S最大支持 4096 像素 x 4096 像素，至于 PC 上的 GPU 则能支持更大的。如果超过了这个大小限制，多数浏览器不会显示任何任何东西。</p>
+<h3 id="关于-draw-call的一点说明"><a href="#关于-draw-call的一点说明" class="headerlink" title="关于 draw call的一点说明"></a>关于 draw call的一点说明</h3><p>每次 draw call 所花费的时间，目前没有找到有效的探查的方法。我从 fps 来侧面看一下 draw call 的影响。<br>当在我电脑上同屏绘制 200 个图片时，每帧让他们的位置加一个像素，绘制了 202 次，fps 为 39 ～ 60， 而将其 cacheAsBitmap，绘制为 3 次，fps 稳定在 60。可以间接说明 draw call 和每帧的渲染时间是直接正相关的。同时根据 fireDebug 标绿来看，drawCall的影响是最大的。</p>
+<h2 id="使用-setTexturePriority"><a href="#使用-setTexturePriority" class="headerlink" title="使用 setTexturePriority"></a>使用 setTexturePriority</h2><p>setTexturePriority 是 PIXI.WebGLRenderer 的一个方法。这个方法可以接受一个数组，这个数组的每一项应该是指向 Phaser.Cache 内的图片的，一旦调用了这个函数，这些图片就不会被分批，他们会在一个批次中被冲刷。比如如果要接连渲染两个 baseTexture 为 A 和 B 的精灵，一般来说 A 加到批次中后，Pixi 接着检索到了 B，那么A所在的批次就应该被冲刷一次，然后 B 重新加到一个新的批次中。但是如果调用了以下代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">game.renderer.setTexturePriority([A, B]);</span><br></pre></td></tr></table></figure>
+<p>那么 B 就会加到 A 的批次中，而不会引起引起冲刷。</p>
+<p>当然这个函数是有限制的，因为当代 GPU 的限制，一般来说这个数组最多支持 16 个，这个最大值具体可由 maxTextures 得知。同时 currentBatchedTextures 属性能告诉我们哪些 texture 是一批次的。除此之外，我们还可以通过手动改变 BaseTexture.textureIndex 来达到同样的效果。</p>
+<p>这个函数不是默认启用的，我们可以在创建游戏的时候启用它，将渲染模式选为 WEBGL_MULTI。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">800</span>, <span class="number">600</span>, Phaser.WEBGL_MULTI);</span><br></pre></td></tr></table></figure>
+<p>或者是将 multiTexture 设置为 true。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> config = &#123;</span><br><span class="line">    width: <span class="number">800</span>,</span><br><span class="line">    height: <span class="number">600</span>,</span><br><span class="line">    renderer: Phaser.AUTO,</span><br><span class="line">    antialias: <span class="literal">true</span>,</span><br><span class="line">    multiTexture: <span class="literal">true</span>,</span><br><span class="line">    state: &#123;</span><br><span class="line">        preload: preload,</span><br><span class="line">        create: create,</span><br><span class="line">        update: update</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(config);</span><br></pre></td></tr></table></figure>
+<h2 id="误区"><a href="#误区" class="headerlink" title="误区"></a>误区</h2><p>在游戏开发过程中，有几个常见的误区。了解清楚内部渲染机制后，也就一目了然了。</p>
+<ol>
+<li><p><code>误区 1: 能自己画的东西就自己画。</code><br>起初在做前端的时候，为了减少记载的资源体积，一定是能用 css 画的就自己画的。但是在 WebGL_MULTI 模式下则不一定。因为我们自己绘制一个 Graphics 会打断一个批次，这样会增加 draw call，尤其是图形，图片混杂的场景，自己画会是得不偿失的。所以需要在资源体积和性能之间做一个权衡。</p>
+</li>
+<li><p><code>误区 2: 按照功能合图。</code><br>如果按照模块化的理念，这样无疑是利于维护的。但是弊端就是无法使用 Pixi 强劲的批次渲染。尤其是两张大图上的小图在场景中相互交错的情况，这时常常会引起几十上百次的 draw call，这就没有利用好批次渲染的强大效率。</p>
+</li>
+</ol>
+<h2 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h2><h3 id="调试工具"><a href="#调试工具" class="headerlink" title="调试工具"></a>调试工具</h3><p>我使用的是火狐浏览器的 fireDebug，打开其控制台，选择 canvas 就可到以截取一帧。我们可以从调试信息中得知，调用了多少次 draw call 和 GPU 交互等等。在显示的调试代码中，我们可以看到标绿的行是最耗时的，比如 drawElements，clear 函数等等。同时下方的序列帧可以看到每一步绘制的对象。</p>
+<h3 id="一个普通的场景"><a href="#一个普通的场景" class="headerlink" title="一个普通的场景"></a>一个普通的场景</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Boot = <span class="function"><span class="keyword">function</span> (<span class="params">game</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Boot.prototype = &#123;</span><br><span class="line">	preload: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.stage.backgroundColor = <span class="string">'#aaa'</span>;</span><br><span class="line">		<span class="keyword">this</span>.load.image(<span class="string">'optionsHall'</span>, <span class="string">'./optionsHall.png'</span>);</span><br><span class="line">		<span class="keyword">this</span>.load.image(<span class="string">'optionsMark'</span>, <span class="string">'./optionsMark.png'</span>);</span><br><span class="line">		<span class="keyword">this</span>.load.image(<span class="string">'optionsMusic'</span>, <span class="string">'./optionsMusic.png'</span>);</span><br><span class="line"></span><br><span class="line">	&#125;,</span><br><span class="line"></span><br><span class="line">	create: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> lists = [</span><br><span class="line">			&#123; <span class="attr">icon</span>: <span class="string">'optionsHall'</span>, <span class="attr">text</span>: <span class="string">'游戏大厅'</span>&#125;,</span><br><span class="line">			&#123; <span class="attr">icon</span>: <span class="string">'optionsMark'</span>, <span class="attr">text</span>: <span class="string">'开始关闭游戏'</span>&#125;,</span><br><span class="line">			&#123; <span class="attr">icon</span>: <span class="string">'optionsMusic'</span>, <span class="attr">text</span>: <span class="string">'声音选项'</span>&#125;,</span><br><span class="line">		];</span><br><span class="line">		lists.forEach(<span class="function">(<span class="params">&#123; icon, text &#125;, index</span>) =&gt;</span> &#123;</span><br><span class="line">			<span class="keyword">this</span>.add.image(<span class="number">200</span>, index * <span class="number">50</span> + <span class="number">70</span>, icon);</span><br><span class="line">			<span class="keyword">this</span>.add.text(<span class="number">200</span> + <span class="number">50</span>, index * <span class="number">50</span> + <span class="number">70</span>, text, &#123; <span class="attr">fill</span>: <span class="string">'red'</span> &#125;);</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(&#123;</span><br><span class="line">	width: <span class="number">500</span>,</span><br><span class="line">	height: <span class="number">500</span>,</span><br><span class="line">	renderer: Phaser.AUTO</span><br><span class="line">&#125;);</span><br><span class="line">game.state.add(<span class="string">'Boot'</span>, Boot);</span><br><span class="line">game.state.start(<span class="string">'Boot'</span>);</span><br></pre></td></tr></table></figure>
+<p>这段代码首先在 preload 阶段加载了三个图标。接着来到 create 阶段，首先定义了一个 lists 用来放信息，然后对这个 lists 进行遍历，先画一个图标，然后写一段文字。这是一个非常普通而常见的场景，小到下拉框，大到结果展示，都会出现这样的场景。我们打开 fireDebug，发现掉起了 8 次 draw call。虽然看起来还能接受，但是这只是三个的情况，当这个列表越来越多，比如 20 条的时候，就会掉起 42 次 draw call。 所幸的是，我们是可以优化的。</p>
+<img src="/2018/03/18/游戏渲染优化/1.gif" title="一个普通的场景">
+<h3 id="使用批次渲染优化"><a href="#使用批次渲染优化" class="headerlink" title="使用批次渲染优化"></a>使用批次渲染优化</h3><p>我们可以看到在 fireDebug 中显示的渲染次序，一个图标，然后一行文字，然后再一个图标，再一行文字，很明显便是文字打断了图标的批次。考虑到我们的渲染批次原理，第一个想到的优化便是将图片放到一个批次里，或者合图，然后先绘制图标，再去绘制文字。所以，代码改写如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 此处不演示合图，合图也可以达到相同的效果</span></span><br><span class="line"><span class="keyword">this</span>.game.renderer.setTexturePriority([<span class="string">'optionsHall'</span>, <span class="string">'optionsMark'</span>, <span class="string">'optionsMusic'</span>]);</span><br><span class="line"><span class="comment">// ......</span></span><br><span class="line"><span class="comment">// 拆分绘制，先绘制图标，再绘制文字</span></span><br><span class="line">lists.forEach(<span class="function">(<span class="params">list, index</span>) =&gt;</span> &#123;</span><br><span class="line">	<span class="keyword">this</span>.add.image(<span class="number">50</span>, index * <span class="number">50</span> + <span class="number">60</span>, list.icon);</span><br><span class="line">&#125;);</span><br><span class="line">lists.forEach(<span class="function">(<span class="params">list, index</span>) =&gt;</span> &#123;</span><br><span class="line">	<span class="keyword">this</span>.add.text(<span class="number">110</span>, index * <span class="number">50</span> + <span class="number">63</span>, list.text, &#123; <span class="attr">fill</span>: <span class="string">'#abcdef'</span>, <span class="attr">fontWeight</span>: <span class="string">'normal'</span>&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// ......</span></span><br><span class="line"><span class="comment">// 开启 WebGL_MULTI</span></span><br><span class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(&#123;</span><br><span class="line">	width: <span class="number">500</span>,</span><br><span class="line">	height: <span class="number">500</span>,</span><br><span class="line">	renderer: Phaser.WebGL_MULTI</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>再次打开 fireDebug，可以看到只绘制了 6 次。</p>
+<p>但是仔细一想，这只是减少了图片的绘制次数，但是文字的次数分文未少啊，比如 20 条记录，依然需要23次 draw call，当然，是有解决办法的。</p>
+<img src="/2018/03/18/游戏渲染优化/2.gif" title="使用批次渲染优化">
+<h3 id="位图字体-bitmap-font"><a href="#位图字体-bitmap-font" class="headerlink" title="位图字体(bitmap font)"></a>位图字体(bitmap font)</h3><p>位图字体是可以自行选择字体，字号，渐变，阴影等的自定义的字体，在 WebGL 下有良好的性能，具体不在这里详述。在这里最重要的一点是，位图字体是可以作为材质加到批次中的。这样所有的文字和图标都会在一个批次中，从而文字就不会打断这个批次了。<br>代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 加载位图字体</span></span><br><span class="line"><span class="keyword">this</span>.load.bitmapFont(<span class="string">'font'</span>, <span class="string">'./drawCall_0.png'</span>, <span class="string">'./drawCall.fnt'</span>);</span><br><span class="line"><span class="comment">// ......</span></span><br><span class="line"><span class="comment">// 加入到批次中</span></span><br><span class="line"><span class="keyword">this</span>.game.cache.getBitmapFont(<span class="string">'font'</span>).base.textureIndex = enabled.length + <span class="number">1</span>;</span><br><span class="line"><span class="comment">// 使用位图字体而不是普通文本</span></span><br><span class="line">lists.forEach(<span class="function">(<span class="params">&#123; icon, text &#125;, index</span>) =&gt;</span> &#123;</span><br><span class="line">	<span class="keyword">this</span>.add.image(<span class="number">200</span>, index * <span class="number">50</span> + <span class="number">70</span>, icon);</span><br><span class="line">	<span class="keyword">this</span>.add.bitmapText(<span class="number">200</span>	, index * <span class="number">50</span> + <span class="number">70</span>, <span class="string">'font'</span>, text, <span class="number">50</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>打开 fireDebug 我们可以看到只绘制离开仅仅 3 次，而且更重要的是，不管是 20 条还是 200 条，其绘制次数依然只有 3 次。因为同一批次，只要在 2000 以内都是一次绘制完的。我们对于这个场景的优化，也就到达了终点</p>
+<h3 id="多余的两次-draw-call"><a href="#多余的两次-draw-call" class="headerlink" title="多余的两次 draw call"></a>多余的两次 draw call</h3><p>我们可以看到，即使我们的场景是一次就绘制好了，依然调用了 3 次 draw call，这是因为 Phaser 内部的 2 次调用。第一个是 clearBeforeRender，Phaser 默认会在每一帧开始前，清除所有的像素，这是一次 draw call，而另一个则是 Phaser 自己的 debug 发送的一个 texture。</p>
+<p>如果有大背景图的画可以让 Phaser 不进行 clearBeforeRender。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">game.clearBeforeRender = <span class="literal">false</span>;</span><br></pre></td></tr></table></figure></p>
+<p>如果不需要 debug，比如生产环境，我们也可以把 debug 禁用掉。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(&#123;</span><br><span class="line">	width: <span class="number">500</span>,</span><br><span class="line">	height: <span class="number">500</span>,</span><br><span class="line">	renderer: Phaser.WEBGL_MULTI,</span><br><span class="line">	enableDebug: <span class="literal">false</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>再次打开 fireDebug，draw call 次数是惊人的 1 次。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>以上便是我的分享内容了，其实了解了渲染的机制原理，再去做优化便是有理有据了。大家可以在自己的项目初期就考虑到绘制的性能，按照绘制顺序来组织显示对象。谢谢。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong><a href="https://github.com/haruhihi" target="_blank">haruhihi</a></li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://fx-team.github.io/2018/03/18/游戏渲染优化/" title="游戏渲染优化">https://fx-team.github.io/2018/03/18/游戏渲染优化/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/WebGL-游戏-优化/" rel="tag"># WebGL 游戏 优化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/16/前端技术周刊-2018-03-16/" rel="next" title="前端技术周刊 - 2018/03/16">
+                <i class="fa fa-chevron-left"></i> 前端技术周刊 - 2018/03/16
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/20/前端技术周刊-2018-03-20/" rel="prev" title="前端技术周刊 - 2018/03/20">
+                前端技术周刊 - 2018/03/20 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/fx.jpeg"
+                alt="fx-team" />
+            
+              <p class="site-author-name" itemprop="name">fx-team</p>
+              <p class="site-description motion-element" itemprop="description">一个富有想象力的前端团队</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/fx-team" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pixi-渲染机制"><span class="nav-number">1.</span> <span class="nav-text">Pixi 渲染机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Texture-Atlas"><span class="nav-number">2.</span> <span class="nav-text">使用 Texture Atlas</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于-draw-call的一点说明"><span class="nav-number">2.1.</span> <span class="nav-text">关于 draw call的一点说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-setTexturePriority"><span class="nav-number">3.</span> <span class="nav-text">使用 setTexturePriority</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#误区"><span class="nav-number">4.</span> <span class="nav-text">误区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实战"><span class="nav-number">5.</span> <span class="nav-text">实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调试工具"><span class="nav-number">5.1.</span> <span class="nav-text">调试工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个普通的场景"><span class="nav-number">5.2.</span> <span class="nav-text">一个普通的场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用批次渲染优化"><span class="nav-number">5.3.</span> <span class="nav-text">使用批次渲染优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位图字体-bitmap-font"><span class="nav-number">5.4.</span> <span class="nav-text">位图字体(bitmap font)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多余的两次-draw-call"><span class="nav-number">5.5.</span> <span class="nav-text">多余的两次 draw call</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">6.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fx-team</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.3"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
