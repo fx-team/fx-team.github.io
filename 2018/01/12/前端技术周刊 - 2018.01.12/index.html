@@ -5,15 +5,12 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-CN">
+<html class="theme-next muse use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
-
-
-
 
 
 
@@ -49,25 +46,53 @@
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=6.0.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.0.0" rel="stylesheet" type="text/css" />
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.3">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.0">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.3">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.3">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.0">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=6.0.3" color="#222">
-
-
-
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.0" color="#222">
 
 
 
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="fx-team" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端浏览器存储初探">
+<meta property="og:url" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/index.html">
+<meta property="og:site_name" content="fx-team">
+<meta property="og:description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg">
+<meta property="og:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/youku_cookie.jpg">
+<meta property="og:updated_time" content="2018-01-15T03:09:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端浏览器存储初探">
+<meta name="twitter:description" content="随着现代化浏览器的发展，客户端的能力已经有了很大的提升，比如 Chrome、Firefox，通过 webkit 等内核的发展与版本的迭代与升级，浏览器变得越来越强大。对于前端来说，由于浏览器的升级所能做的事情越来越多，我们在数据存储方面也就有很多方案可以选择，大概有以下几种方式：  cookie localStorage sessionStorage indexedDB PWA service w">
+<meta name="twitter:image" content="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/baidu_cookie.jpg">
 
 
 
@@ -76,13 +101,17 @@
   var CONFIG = {
     root: '/',
     scheme: 'Muse',
-    version: '6.0.3',
+    version: '6.0.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -94,45 +123,14 @@
 </script>
 
 
-  
+
+  <link rel="canonical" href="https://fx-team.github.io/2018/01/13/前端浏览器存储初探/"/>
 
 
 
 
-  
-  <meta name="keywords" content="点滴," />
 
-
-<meta name="description" content="这是fx-team团队2018年的第一篇博客，新的一年朝着自己的目标前进。本博客用于记录fx-team日常学习、工作反思、开源作品等各个方面。 2018年乘风破浪，我们的征途是星辰大海。">
-<meta name="keywords" content="点滴">
-<meta property="og:type" content="article">
-<meta property="og:title" content="新的开始">
-<meta property="og:url" content="https://fx-team.github.io/2018/01/04/新的开始/index.html">
-<meta property="og:site_name" content="fx-team">
-<meta property="og:description" content="这是fx-team团队2018年的第一篇博客，新的一年朝着自己的目标前进。本博客用于记录fx-team日常学习、工作反思、开源作品等各个方面。 2018年乘风破浪，我们的征途是星辰大海。">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-02T06:41:34.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="新的开始">
-<meta name="twitter:description" content="这是fx-team团队2018年的第一篇博客，新的一年朝着自己的目标前进。本博客用于记录fx-team日常学习、工作反思、开源作品等各个方面。 2018年乘风破浪，我们的征途是星辰大海。">
-
-
-
-  <link rel="alternate" href="/atom.xml" title="fx-team" type="application/atom+xml" />
-
-
-
-
-  <link rel="canonical" href="https://fx-team.github.io/2018/01/04/新的开始/"/>
-
-
-
-<script type="text/javascript" id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
-  <title>新的开始 | fx-team</title>
+  <title>前端技术周刊 - 2018/01/12 | fx-team</title>
   
 
 
@@ -141,38 +139,10 @@
 
 
 
-
-
-  <noscript>
-  <style type="text/css">
-    .use-motion .motion-element,
-    .use-motion .brand,
-    .use-motion .menu-item,
-    .sidebar-inner,
-    .use-motion .post-block,
-    .use-motion .pagination,
-    .use-motion .comments,
-    .use-motion .post-header,
-    .use-motion .post-body,
-    .use-motion .collection-title { opacity: initial; }
-
-    .use-motion .logo,
-    .use-motion .site-title,
-    .use-motion .site-subtitle {
-      opacity: initial;
-      top: initial;
-    }
-
-    .use-motion {
-      .logo-line-before i { left: initial; }
-      .logo-line-after i { right: initial; }
-    }
-  </style>
-</noscript>
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -217,31 +187,29 @@
         
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
-            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+
+            
+              首页
+            
+
+          </a>
         </li>
       
         
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
-            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-join">
-          <a href="/join" rel="section">
-            <i class="menu-item-icon fa fa-fw fa-user-plus"></i> <br />加入我们</a>
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+
+            
+              归档
+            
+
+          </a>
         </li>
       
 
@@ -253,15 +221,9 @@
 </nav>
 
 
-  
-
-
 
  </div>
     </header>
-
-    
-
 
     <main id="main" class="main">
       <div class="main-inner">
@@ -285,12 +247,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/04/新的开始/">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/01/12/前端技术周刊 - 2018.01.12/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="网易彩票前端团队">
+      <meta itemprop="name" content="一个富有想象力的前端团队fx-team">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/fx.jpeg">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -302,7 +264,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">新的开始</h1>
+          <h1 class="post-title" itemprop="name headline">前端技术周刊 - 2018/01/12</h1>
         
 
         <div class="post-meta">
@@ -314,10 +276,9 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-04T14:30:53+08:00">2018-01-04</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-12T16:40:04+08:00">2018-01-12</time>
             
 
-            
             
 
             
@@ -351,8 +312,10 @@
       
 
       
-        <p>这是<strong>fx-team</strong>团队2018年的第一篇博客，新的一年朝着自己的目标前进。本博客用于记录<strong>fx-team</strong>日常学习、工作反思、开源作品等各个方面。</p>
-<p>2018年乘风破浪，我们的征途是星辰大海。</p>
+        <p><a href="https://www.w3ctech.com/topic/866" target="_blank" rel="noopener">Service Worker 入门</a><br><em>原生App拥有Web应用通常所不具备的富离线体验，定时的静默更新，消息通知推送等功能。而新的Service workers标准让在Web App上拥有这些功能成为可能。</em></p>
+<p><a href="https://medium.mybridge.co/node-js-open-source-for-the-past-year-v-2018-757291e638ed" target="_blank" rel="noopener">2017 年发布的优秀 Node.js 开源项目盘点</a><br><em>2017 年里， Node.js 社区也愈发活跃；本文从 4700 多个去年发布的 Node.js 开源项目中，挑选出 25 个优秀的代表。这些项目涵盖了不同的功能方向，譬如 Headless Chrome Node API Puppeteer, 用于创建模拟数据的 faker.js，用于将 Node.js 项目打包为可执行文件的 Pkg，用于进行图片处理的 Sharp，用于进行 Docker 界面化管理的 Portainer 等等。</em></p>
+<p><a href="https://isux.tencent.com/articles/isux-h5-in-iphone.html" target="_blank" rel="noopener">极速适配 iPhone X 秘笈</a><br><em>2017年9月苹果发布了iPhone X机型，对于它的“刘海儿”和底部Home Indicator，QQ空间H5也在第一时间做了兼容适配。在适配过程中，尝试的方案介绍。</em></p>
+<p><a href="http://taobaofed.org/blog/2017/05/18/how-to-display-git-diff/" target="_blank" rel="noopener">如何实现一个 Git Diff 解析器</a><br><em>代码审阅中一个重要功能是对两个 commit 进行 diff 并展示到页面中，这篇文章将尝试总结其实现过程。</em></p>
 
       
     </div>
@@ -365,26 +328,12 @@
     
 
     
-      <div>
-        <ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者：</strong><a href="https://github.com/tracyxiong1" target="_blank">tracyxiong1</a></li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="https://fx-team.github.io/2018/01/04/新的开始/" title="新的开始">https://fx-team.github.io/2018/01/04/新的开始/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li>
-</ul>
-
-      </div>
-    
 
     <footer class="post-footer">
       
         <div class="post-tags">
           
-            <a href="/tags/点滴/" rel="tag"># 点滴</a>
+            <a href="/tags/技术周刊/" rel="tag"># 技术周刊</a>
           
         </div>
       
@@ -397,14 +346,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/01/08/Phaser开发游戏总结/" rel="next" title="Phaser开发游戏总结">
+                <i class="fa fa-chevron-left"></i> Phaser开发游戏总结
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/01/05/前端技术周刊-2018.01.05/" rel="prev" title="前端技术周刊 - 2018/01/05">
-                前端技术周刊 - 2018/01/05 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/01/13/前端浏览器存储初探/" rel="prev" title="前端浏览器存储初探">
+                前端浏览器存储初探 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -429,6 +382,9 @@
 
 
           </div>
+          
+
+
           
 
   
@@ -459,11 +415,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/fx.jpeg"
-                alt="网易彩票前端团队" />
-            
-              <p class="site-author-name" itemprop="name">网易彩票前端团队</p>
+              <p class="site-author-name" itemprop="name">一个富有想象力的前端团队fx-team</p>
               <p class="site-description motion-element" itemprop="description">一个富有想象力的前端团队</p>
           </div>
 
@@ -474,7 +426,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -486,32 +438,10 @@
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">10</span>
+                  
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">标签</span>
-                  </a>
+                  
                 </div>
               
             </nav>
@@ -527,15 +457,6 @@
           
 
           
-            <div class="links-of-author motion-element">
-              
-                <span class="links-of-author-item">
-                  <a href="https://github.com/fx-team" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                  
-                </span>
-              
-            </div>
-          
 
           
           
@@ -543,9 +464,6 @@
           
           
 
-          
-            
-          
           
 
         </div>
@@ -569,14 +487,12 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">网易彩票前端团队</span>
+  <span class="author" itemprop="copyrightHolder">一个富有想象力的前端团队fx-team</span>
 
   
 
   
 </div>
-
-
 
 
   <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
@@ -587,7 +503,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.3</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.0</div>
 
 
 
@@ -667,29 +583,33 @@
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=6.0.3"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.0"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=6.0.3"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.3"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=6.0.3"></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.0"></script>
 
 
 
   
+  
 
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.3"></script>
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.0"></script>
 
 
 
   
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.0"></script>
+
+
+
+  
+
+
+  
+
 
 
 
@@ -716,23 +636,21 @@
 
 
 
-  
-
-
-
 
 
   
 
-  
+
+
+
 
   
 
   
 
   
-  
 
+  
   
 
   

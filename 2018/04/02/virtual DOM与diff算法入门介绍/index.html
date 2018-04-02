@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.3" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+<meta name="description" content="随着前端框架的流行，Vue 和 React 被越来越多的公司和团队使用，大家今天就跟着我一起来看看 virtual DOM 作为 Vue 和 React 的核心，它到底是什么，为什么会存在 virtual DOM，以及它是如何使用的，最后给大家简单介绍一些 diff 算法的实现。下面我们开始吧~通过今天的介绍，我们将了解以下三部分的内容，也希望大家看后有所收获~  virtual DOM 是什么，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="virtual DOM 与 diff 算法入门介绍">
+<meta property="og:url" content="https://fx-team.github.io/2018/04/02/virtual DOM与diff算法入门介绍/index.html">
+<meta property="og:site_name" content="fx-team">
+<meta property="og:description" content="随着前端框架的流行，Vue 和 React 被越来越多的公司和团队使用，大家今天就跟着我一起来看看 virtual DOM 作为 Vue 和 React 的核心，它到底是什么，为什么会存在 virtual DOM，以及它是如何使用的，最后给大家简单介绍一些 diff 算法的实现。下面我们开始吧~通过今天的介绍，我们将了解以下三部分的内容，也希望大家看后有所收获~  virtual DOM 是什么，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fx-team.github.io/2018/04/02/virtual%20DOM与diff算法入门介绍/snabbdom.jpg">
+<meta property="og:updated_time" content="2018-04-02T09:19:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="virtual DOM 与 diff 算法入门介绍">
+<meta name="twitter:description" content="随着前端框架的流行，Vue 和 React 被越来越多的公司和团队使用，大家今天就跟着我一起来看看 virtual DOM 作为 Vue 和 React 的核心，它到底是什么，为什么会存在 virtual DOM，以及它是如何使用的，最后给大家简单介绍一些 diff 算法的实现。下面我们开始吧~通过今天的介绍，我们将了解以下三部分的内容，也希望大家看后有所收获~  virtual DOM 是什么，">
+<meta name="twitter:image" content="https://fx-team.github.io/2018/04/02/virtual%20DOM与diff算法入门介绍/snabbdom.jpg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="fx-team" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="https://fx-team.github.io/2018/04/02/virtual DOM与diff算法入门介绍/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>virtual DOM 与 diff 算法入门介绍 | fx-team</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">fx-team</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-join">
+          <a href="/join" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-user-plus"></i> <br />加入我们</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://fx-team.github.io/2018/04/02/virtual DOM与diff算法入门介绍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="网易彩票前端团队">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/fx.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fx-team">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">virtual DOM 与 diff 算法入门介绍</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-02T15:14:20+08:00">2018-04-02</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>随着前端框架的流行，Vue 和 React 被越来越多的公司和团队使用，大家今天就跟着我一起来看看 virtual DOM 作为 Vue 和 React 的核心，它到底是什么，为什么会存在 virtual DOM，以及它是如何使用的，最后给大家简单介绍一些 diff 算法的实现。下面我们开始吧~<br>通过今天的介绍，我们将了解以下三部分的内容，也希望大家看后有所收获~</p>
+<ol>
+<li><p>virtual DOM 是什么，为什么会存在 virtual DOM ？</p>
+</li>
+<li><p>virtual DOM 如何应用，有哪些核心的 API ？</p>
+</li>
+<li><p>简单介绍一下 diff 算法。</p>
+</li>
+</ol>
+<h4 id="virtual-DOM-是什么，为什么会存在-virtual-DOM？"><a href="#virtual-DOM-是什么，为什么会存在-virtual-DOM？" class="headerlink" title="virtual DOM 是什么，为什么会存在 virtual DOM？"></a>virtual DOM 是什么，为什么会存在 virtual DOM？</h4><ul>
+<li>用 JS 模拟 DOM 结构（不是真正的DOM）；</li>
+<li>DOM 结构的变化，放在 JS 层来实现；</li>
+<li>提高重绘性能；</li>
+</ul>
+<p>简单总结一下，由于在浏览器端频繁操作 DOM 是非常耗性能的事情，为了避免这种情况，我们会使用 JS 来模拟 DOM 结构，同时，DOM 结构的变化也同样放在 JS 层操作（JS 是图灵完备语言），这就是为什么会存在 virtual DOM 的原因。<br>既然 DOM 结构需要用 JS 来进行模拟，那我们下面就举一个具体的例子看看究竟是如何进行模拟的呢？</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">'list'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">'item'</span>&gt;</span>item 1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">'item'</span>&gt;</span>item 2<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上述是一个简单的列表结构，如果要将它用进行 JS 模拟，便是下面的结果：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  tag: <span class="string">'ul'</span>,</span><br><span class="line">  attrs: &#123;</span><br><span class="line">    id: <span class="string">'list'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  children: [&#123;</span><br><span class="line">    tag: <span class="string">'li'</span>,</span><br><span class="line">    attrs: &#123;<span class="attr">className</span>: <span class="string">'item'</span>&#125;,</span><br><span class="line">    children: [<span class="string">'item 1'</span>]</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    tag: <span class="string">'li'</span>,</span><br><span class="line">    attrs: &#123;<span class="attr">className</span>: <span class="string">'item'</span>&#125;,</span><br><span class="line">    children: [<span class="string">'item 2'</span>]</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很明显，下面的对象包含了上述列表结构的全部信息，标签、属性、子节点等等，这样我们就完成了 virtual DOM 的初始工作，那么 virtual DOM 到底是怎么实现的呢，不急，我们先去看看在没有它出现之前，用 jQuery 是怎样实现的~</p>
+<h5 id="DEMO"><a href="#DEMO" class="headerlink" title="DEMO"></a>DEMO</h5><p>需求：将下面的数据展示成表格，随便修改一个表格，表格也跟着修改；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">'张三'</span>,</span><br><span class="line">    age: <span class="string">'20'</span>,</span><br><span class="line">    address: <span class="string">'北京'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">'李四'</span>,</span><br><span class="line">    age: <span class="string">'21'</span>,</span><br><span class="line">    address: <span class="string">'上海'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: <span class="string">'王五'</span>,</span><br><span class="line">    age: <span class="string">'22'</span>,</span><br><span class="line">    address: <span class="string">'广州'</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>实现如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"container"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"btn-change"</span>&gt;</span>change<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"https://cdn.bootcss.com/jquery/3.2.0/jquery.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 数据源</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> data = [</span></span><br><span class="line"><span class="undefined">            &#123;</span></span><br><span class="line"><span class="javascript">                name: <span class="string">'张三'</span>,</span></span><br><span class="line"><span class="javascript">                age: <span class="string">'20'</span>,</span></span><br><span class="line"><span class="javascript">                address: <span class="string">'北京'</span></span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            &#123;</span></span><br><span class="line"><span class="javascript">                name: <span class="string">'李四'</span>,</span></span><br><span class="line"><span class="javascript">                age: <span class="string">'21'</span>,</span></span><br><span class="line"><span class="javascript">                address: <span class="string">'上海'</span></span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            &#123;</span></span><br><span class="line"><span class="javascript">                name: <span class="string">'王五'</span>,</span></span><br><span class="line"><span class="javascript">                age: <span class="string">'22'</span>,</span></span><br><span class="line"><span class="javascript">                address: <span class="string">'广州'</span></span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        ]</span></span><br><span class="line"><span class="javascript">        <span class="comment">// 渲染函数</span></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params">data</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="comment">// 外层容器</span></span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> $container = $(<span class="string">'#container'</span>);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// 清空容器</span></span></span><br><span class="line"><span class="javascript">            $container.html(<span class="string">''</span>);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// 拼接 table</span></span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> $table = $(<span class="string">'&lt;table&gt;'</span>);</span></span><br><span class="line"><span class="xml">            $table.append($('<span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>name<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>age<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>address<span class="tag">&lt;/<span class="name">td</span>&gt;</span>/tr&gt;'));</span></span><br><span class="line"><span class="javascript">            data.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span></span><br><span class="line"><span class="xml">                $table.append($('<span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>' + item.name + '<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>' + item.age + '<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>' + item.address + '<span class="tag">&lt;/<span class="name">td</span>&gt;</span>/tr&gt;'))</span></span><br><span class="line"><span class="undefined">            &#125;);</span></span><br><span class="line"><span class="javascript">            <span class="comment">// 渲染到页面（注意顺序问题）</span></span></span><br><span class="line"><span class="undefined">            $container.append($table);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 改变数据</span></span></span><br><span class="line"><span class="javascript">        $(<span class="string">'#btn-change'</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="undefined">            data[1].age = 30</span></span><br><span class="line"><span class="javascript">            data[<span class="number">2</span>].address = <span class="string">'深圳'</span></span></span><br><span class="line"><span class="javascript">            <span class="comment">// re-render 再次渲染</span></span></span><br><span class="line"><span class="undefined">            render(data);</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 页面加载完立刻执行（初次渲染）</span></span></span><br><span class="line"><span class="undefined">        render(data);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面的代码实现逻辑比较清晰，也并不复杂，简单来说就是初次渲染，如果数据有改动，那么更新数据再次渲染，相信大家看完代码也都足够清楚。<br>做了足够的铺垫，下面正式的主人公要登场了，我们接着去解决上面提出的第二个问题，virtual DOM 如何应用，有哪些核心的 API ？</p>
+<h4 id="virtual-DOM-如何应用，有哪些核心的-API-？"><a href="#virtual-DOM-如何应用，有哪些核心的-API-？" class="headerlink" title="virtual DOM 如何应用，有哪些核心的 API ？"></a>virtual DOM 如何应用，有哪些核心的 API ？</h4><p>下面给大家介绍 snabbdom（ <a href="https://github.com/snabbdom/snabbdom" target="_blank" rel="noopener">https://github.com/snabbdom/snabbdom</a> ）github 上面关于 virtual DOM 的第三方开源库并不是很多，这也侧面反应了其实它的实现过程还是相对复杂的，之所以挑选了 snabbdom，也是因为 Vue 2.0 的 virtual DOM 就是在它的基础上实现的。</p>
+<img src="/2018/04/02/virtual%20DOM与diff算法入门介绍/snabbdom.jpg" title="百度 cookie 示例">
+<p>上面这张图是 github 上面 snabbdom 的官方示例，重复出现的函数我已经标红了，不难猜测，h 函数和 patch 函数也正是 snabbdom 的核心函数。<br>我们仿照官方示例，试图改写刚才的 DEMO，随后去浏览器中查看 DOM 元素的变化，看看是否与我们预期的相一致。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"container"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"btn-change"</span>&gt;</span>change<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdn.bootcss.com/snabbdom/0.7.0/snabbdom.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdn.bootcss.com/snabbdom/0.7.0/snabbdom-class.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdn.bootcss.com/snabbdom/0.7.0/snabbdom-props.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdn.bootcss.com/snabbdom/0.7.0/snabbdom-style.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdn.bootcss.com/snabbdom/0.7.0/snabbdom-eventlisteners.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdn.bootcss.com/snabbdom/0.7.0/h.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> snabbdom = <span class="built_in">window</span>.snabbdom</span></span><br><span class="line"><span class="javascript">        <span class="comment">// 定义关键函数 patch</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> patch = snabbdom.init([</span></span><br><span class="line"><span class="undefined">            snabbdom_class,</span></span><br><span class="line"><span class="undefined">            snabbdom_props,</span></span><br><span class="line"><span class="undefined">            snabbdom_style,</span></span><br><span class="line"><span class="undefined">            snabbdom_eventlisteners</span></span><br><span class="line"><span class="undefined">        ])</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 定义关键函数 h</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> h = snabbdom.h</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 原始数据</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> data = [</span></span><br><span class="line"><span class="undefined">            &#123;</span></span><br><span class="line"><span class="javascript">                name: <span class="string">'张三'</span>,</span></span><br><span class="line"><span class="javascript">                age: <span class="string">'20'</span>,</span></span><br><span class="line"><span class="javascript">                address: <span class="string">'北京'</span></span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            &#123;</span></span><br><span class="line"><span class="javascript">                name: <span class="string">'李四'</span>,</span></span><br><span class="line"><span class="javascript">                age: <span class="string">'21'</span>,</span></span><br><span class="line"><span class="javascript">                address: <span class="string">'上海'</span></span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            &#123;</span></span><br><span class="line"><span class="javascript">                name: <span class="string">'王五'</span>,</span></span><br><span class="line"><span class="javascript">                age: <span class="string">'22'</span>,</span></span><br><span class="line"><span class="javascript">                address: <span class="string">'广州'</span></span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        ]</span></span><br><span class="line"><span class="javascript">        <span class="comment">// 把表头也放在 data 中</span></span></span><br><span class="line"><span class="undefined">        data.unshift(&#123;</span></span><br><span class="line"><span class="javascript">            name: <span class="string">'姓名'</span>,</span></span><br><span class="line"><span class="javascript">            age: <span class="string">'年龄'</span>,</span></span><br><span class="line"><span class="javascript">            address: <span class="string">'地址'</span></span></span><br><span class="line"><span class="undefined">        &#125;)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> container = <span class="built_in">document</span>.getElementById(<span class="string">'container'</span>)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 渲染函数</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> vnode</span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params">data</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> newVnode = h(<span class="string">'table'</span>, &#123;&#125;, data.map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="keyword">var</span> tds = []</span></span><br><span class="line"><span class="javascript">                <span class="keyword">var</span> i</span></span><br><span class="line"><span class="javascript">                <span class="keyword">for</span> (i <span class="keyword">in</span> item) &#123;</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">if</span> (item.hasOwnProperty(i)) &#123;</span></span><br><span class="line"><span class="javascript">                        tds.push(h(<span class="string">'td'</span>, &#123;&#125;, item[i] + <span class="string">''</span>))</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="javascript">                <span class="keyword">return</span> h(<span class="string">'tr'</span>, &#123;&#125;, tds)</span></span><br><span class="line"><span class="undefined">            &#125;))</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">            <span class="keyword">if</span> (vnode) &#123;</span></span><br><span class="line"><span class="javascript">                <span class="comment">// re-render</span></span></span><br><span class="line"><span class="undefined">                patch(vnode, newVnode)</span></span><br><span class="line"><span class="javascript">            &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="javascript">                <span class="comment">// 初次渲染</span></span></span><br><span class="line"><span class="undefined">                patch(container, newVnode)</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="javascript">            <span class="comment">// 存储当前的 vnode 结果</span></span></span><br><span class="line"><span class="undefined">            vnode = newVnode</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="javascript">        <span class="comment">// 初次渲染</span></span></span><br><span class="line"><span class="undefined">        render(data)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> btnChange = <span class="built_in">document</span>.getElementById(<span class="string">'btn-change'</span>)</span></span><br><span class="line"><span class="javascript">        btnChange.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="undefined">            data[1].age = 30</span></span><br><span class="line"><span class="javascript">            data[<span class="number">2</span>].address = <span class="string">'深圳'</span></span></span><br><span class="line"><span class="javascript">            <span class="comment">// re-render</span></span></span><br><span class="line"><span class="undefined">            render(data)</span></span><br><span class="line"><span class="undefined">        &#125;)</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面的实现过程基本与 jQuery 的相类似，只不过引用了 snabbdom 中的函数，大家可以去浏览器中观察 DOM 的变化，看看与之前的有什么不同，不同的地方也恰恰就是 virtual DOM 存在的原因。<br>讲了 virtual DOM  是什么，也初步体验了 virtual DOM 的实现过程，接下来，我们继续去了解 virtual DOM 中的核心算法 —— diff 算法。</p>
+<h4 id="简单介绍一下-diff-算法；"><a href="#简单介绍一下-diff-算法；" class="headerlink" title="简单介绍一下 diff 算法；"></a>简单介绍一下 diff 算法；</h4><p>想提前说一点注意，diff 算法我在这里去繁就简，因为 diff 算法非常之复杂，源码量也非常之大，所以我们在这里只做最核心流程的介绍，不去关心具体的细节，如果有感兴趣的同学可以自己抽时间去研究更加深入的 diff 算法的实现。</p>
+<p>通过上面 snabbdom 的了解，我们不难看出，patch 函数实际就是在实现 diff 算法，那么我们就抓住核心，去研究一下 patch 函数是如何实现的，也就了解了 diff 算法。</p>
+<ul>
+<li>patch(container, vnode);</li>
+<li>patch(vnode, newVnode);</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// patch(container, vnode);</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createElement</span>(<span class="params">vnode</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> tag = vnode.tag  <span class="comment">// 'ul'</span></span><br><span class="line">    <span class="keyword">var</span> attrs = vnode.attrs || &#123;&#125;</span><br><span class="line">    <span class="keyword">var</span> children = vnode.children || []</span><br><span class="line">    <span class="keyword">if</span> (!tag) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建真实的 DOM 元素</span></span><br><span class="line">    <span class="keyword">var</span> elem = <span class="built_in">document</span>.createElement(tag)</span><br><span class="line">    <span class="comment">// 属性</span></span><br><span class="line">    <span class="keyword">var</span> attrName</span><br><span class="line">    <span class="keyword">for</span> (attrName <span class="keyword">in</span> attrs) &#123;</span><br><span class="line">        <span class="keyword">if</span> (attrs.hasOwnProperty(attrName)) &#123;</span><br><span class="line">            <span class="comment">// 给 elem 添加属性</span></span><br><span class="line">            elem.setAttribute(attrName, attrs[attrName])</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 子元素</span></span><br><span class="line">    children.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">childVnode</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 给 elem 添加子元素</span></span><br><span class="line">        elem.appendChild(createElement(childVnode))  <span class="comment">// 递归</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回真实的 DOM 元素</span></span><br><span class="line">    <span class="keyword">return</span> elem</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// patch(vnode, newVnode);</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateChildren</span>(<span class="params">vnode, newVnode</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> children = vnode.children || []</span><br><span class="line">    <span class="keyword">var</span> newChildren = newVnode.children || []</span><br><span class="line"></span><br><span class="line">    children.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">childVnode, index</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> newChildVnode = newChildren[index]</span><br><span class="line">        <span class="keyword">if</span> (childVnode.tag === newChildVnode.tag) &#123;</span><br><span class="line">            <span class="comment">// 深层次对比，递归</span></span><br><span class="line">            updateChildren(childVnode, newChildVnode)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 替换</span></span><br><span class="line">            replaceNode(childVnode, newChildVnode)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">replaceNode</span>(<span class="params">vnode, newVnode</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> elem = vnode.elem  <span class="comment">// 真实的 DOM 节点</span></span><br><span class="line">    <span class="keyword">var</span> newElem = createElement(newVnode)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 替换</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的 createElement、updateChildren 仅仅是对 DOM 元素做了最简单的对比，就像本节开始提醒到的，我们现在在了解的阶段，无需去关注细节，把握大体实现流程即可。本文没有涉及到的内容，比如节点的新增和删除、节点的重新排序、节点的样式、属性、事件绑定等内容，如果有兴趣的同学可以自己下来慢慢研究。</p>
+<p>以上就是 virtual DOM 与 diff 算法入门介绍的全部内容了，我们从为什么会有 virtual DOM 入手，介绍了它是什么以及如何应用，同时介绍了最核心的 diff 算法，希望对大家有所帮助。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong><a href="https://github.com/xa2mc" target="_blank">xa2mc</a></li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://fx-team.github.io/2018/04/02/virtual DOM与diff算法入门介绍/" title="virtual DOM 与 diff 算法入门介绍">https://fx-team.github.io/2018/04/02/virtual DOM与diff算法入门介绍/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/30/前端技术周刊-2018-03-30/" rel="next" title="前端技术周刊 - 2018/03/30">
+                <i class="fa fa-chevron-left"></i> 前端技术周刊 - 2018/03/30
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/fx.jpeg"
+                alt="网易彩票前端团队" />
+            
+              <p class="site-author-name" itemprop="name">网易彩票前端团队</p>
+              <p class="site-description motion-element" itemprop="description">一个富有想象力的前端团队</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/fx-team" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#virtual-DOM-是什么，为什么会存在-virtual-DOM？"><span class="nav-number">1.</span> <span class="nav-text">virtual DOM 是什么，为什么会存在 virtual DOM？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DEMO"><span class="nav-number">1.1.</span> <span class="nav-text">DEMO</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#virtual-DOM-如何应用，有哪些核心的-API-？"><span class="nav-number">2.</span> <span class="nav-text">virtual DOM 如何应用，有哪些核心的 API ？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简单介绍一下-diff-算法；"><span class="nav-number">3.</span> <span class="nav-text">简单介绍一下 diff 算法；</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">网易彩票前端团队</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Muse</a> v6.0.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.3"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
