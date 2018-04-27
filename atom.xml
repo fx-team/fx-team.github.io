@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://fx-team.github.io/"/>
-  <updated>2018-04-23T09:09:16.799Z</updated>
+  <updated>2018-04-27T10:26:29.697Z</updated>
   <id>https://fx-team.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>前端技术周刊 - 2018/04/27</title>
+    <link href="https://fx-team.github.io/2018/04/27/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF%E5%91%A8%E5%88%8A-2018-04-27/"/>
+    <id>https://fx-team.github.io/2018/04/27/前端技术周刊-2018-04-27/</id>
+    <published>2018-04-27T09:53:52.000Z</published>
+    <updated>2018-04-27T10:26:29.697Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://juejin.im/post/5adff2c76fb9a07aa43bdded" target="_blank" rel="noopener">前端人脸检测指南</a><br><em>Shape Detection API 的发布已经有一些时日，其主要的提供的能力是给予前端直接可用的特征检测的接口（包括条形码、人脸、文本检测）。本文将简单的对其进行介绍，对前端进行人脸检测进行普适性的讲解。</em></p><p><a href="https://juejin.im/post/5ae081aaf265da0b767d263a" target="_blank" rel="noopener">你应该知道的前端——缓存</a><br><em>带你再回顾 Web 缓存相关知识。</em></p><p><a href="https://mp.weixin.qq.com/s/2cnT2GPn4J641dDCTAQ0zA" target="_blank" rel="noopener">Node.js 10带着npm 6来了！</a><br><em>Node.js 本周发布最新版本 10.0.0，npm 6 也随之发布。该版本专注于稳定性、扩展支持以及为各类应用提供一个可靠稳定的平台。</em></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;a href=&quot;https://juejin.im/post/5adff2c76fb9a07aa43bdded&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;前端人脸检测指南&lt;/a&gt;&lt;br&gt;&lt;em&gt;Shape Detection API 的发布已经有一些
+      
+    
+    </summary>
+    
+    
+      <category term="技术周刊" scheme="https://fx-team.github.io/tags/%E6%8A%80%E6%9C%AF%E5%91%A8%E5%88%8A/"/>
+    
+  </entry>
   
   <entry>
     <title>前端技术周刊 - 2018/04/20</title>
@@ -442,29 +465,6 @@
     
     
       <category term="WebSocket, STOMP" scheme="https://fx-team.github.io/tags/WebSocket-STOMP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>前端技术周刊 - 2018/01/19</title>
-    <link href="https://fx-team.github.io/2018/01/19/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF%E5%91%A8%E5%88%8A-2018-01-19/"/>
-    <id>https://fx-team.github.io/2018/01/19/前端技术周刊-2018-01-19/</id>
-    <published>2018-01-19T08:14:41.000Z</published>
-    <updated>2018-02-02T09:24:08.999Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="https://zhuanlan.zhihu.com/p/32782686" target="_blank" rel="noopener">从前端技术到体验科技</a><br><em>来自玉伯的分享：体验科技，是技术与设计的融合，是服务与用户连接。体验科技是 UX = f(services) 这个公式，能将各种各种的 services（后端服务） 通过技术与设计的融合，转变成体验一流的用户产品。</em></p><p><a href="https://juejin.im/post/5a6155126fb9a01cb64edb45" target="_blank" rel="noopener">Event Loop的规范和实现</a><br><em>Event Loop 是前端的一个比较重要、基础的概念，本文从 Event Loop 规范、实现、应用三个方面进行展开，对于巩固、夯实基础有一定帮助。</em></p><p><a href="https://juejin.im/post/5a5b2a5c6fb9a01cbc6e59f9" target="_blank" rel="noopener">重构 - 代码整洁之道</a><br><em>重构技巧与实践。我们需要明确的一点是: 重构不是一件应该特地拨出一段时间来做的事情。重构不是目的，但是重构可以帮助你把事情做好。</em></p><p><a href="https://webfe.kujiale.com/web-video-player/" target="_blank" rel="noopener">从零开始写一个 Web 视频播放器</a><br><em>本文记录了作者实现 Web 视频播放器的过程。</em></p><p><a href="https://blog.risingstack.com/node-js-development-tips-2018/" target="_blank" rel="noopener">8 个 2018 构建 Node.js 应用的建议</a><br><em>本文收集了作者认为 Node.js 开发者在 2018 年需要知道的技巧，这些建议包括使用 async-await, 尝试 import 与 import(), 尝试 HTTP/2，加固你的 Node.js 应用等等。</em></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/32782686&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;从前端技术到体验科技&lt;/a&gt;&lt;br&gt;&lt;em&gt;来自玉伯的分享：体验科技，是技术与设计的融合，是服务与用户连接。体验科技
-      
-    
-    </summary>
-    
-    
-      <category term="技术周刊" scheme="https://fx-team.github.io/tags/%E6%8A%80%E6%9C%AF%E5%91%A8%E5%88%8A/"/>
     
   </entry>
   
